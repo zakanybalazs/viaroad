@@ -103,14 +103,69 @@ if (!isset($userName)) {
     }
    ?>
 </tbody>
-
 </table>
 </div>
-
 </div>
+</div>
+<div class="container jumbotron">
+  <h3>MOL ellenörző feltöltése</h3>
+
 </div>
 
   </body>
+<script type="text/javascript">
+      document.getElementById('filecsoportos').onchange = function(){
+      var arr = [];
+      var file = this.files[0];
+      var reader = new FileReader();
+      reader.onload = function(progressEvent) {
+        // Entire file
+
+        // By lines
+        var lines = this.result.split('\n');
+        console.log(lines);
+        console.log(lines.lenght)
+        var i = 0;
+        setTimeout(function(){
+        while (lines) {
+          var str = lines[i].replace(/\"/g, '');
+          console.log(lines[i]);
+          var str = str.split(';');
+          var sor = str[0];
+          var nev = str[1];
+          var jel = str[2];
+          var array = new Array({sor: sor, nev:nev, jel:jel});
+          // var array = new Array({nevek: nev, kirendeltseg:kir});
+        // console.log(str);
+
+            $.post("ajax/ajax.insert.php", {
+              Ptable: 'diszk',
+              data: array,
+            },
+            "json");
+          i += 1;
+        }
+      }, 120);
+
+      };
+      reader.readAsText(file);
+      }
+        function feltolt() {
+          var nev_val = $('#nev').val();
+          var kir = $('#kir').val();
+          var array = new Array({nev: nev_val, kirendeltseg:kir});
+          $.post("ajax/ajax.insert.php", {
+            Ptable: 'nevek',
+            data: array,
+          },
+          "json").done(function( response ) {
+            if (response == "ok") {
+              var next = "<tr><td>"+nev_val+"</td><td>"+kir+"</td></tr>"
+              $('#tbody').append(next);
+            }
+          });
+          }
+  </script>
   <script type="text/javascript">
     function ajaxMent(Id, nev, telep, dij) {
       var PCeg = document.getElementById(nev).innerText;
@@ -153,8 +208,8 @@ if (!isset($userName)) {
             }
 
 
-  }
-  </script>
+        }
+    </script>
   <script type="text/javascript">
     function torlesc(id) {
       bootbox.confirm({
@@ -199,7 +254,6 @@ if (!isset($userName)) {
       });
     }
   </script>
-
   <script type="text/javascript">
     function elrejt() {
       $('#hidewell').removeAttr('hidden');

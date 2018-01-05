@@ -54,7 +54,21 @@ if (!empty($_GET['siker'])) {
                   <option value="normal">Normál</option>
                   <option value="kartyas">Tankolókártyás</option>
               </select>
+              <script type="text/javascript">
+                  $('#kategoria').change(function() {
+                    if ($(this).val() == "kartyas") {
+                      $('#tkarty').slideDown(1000);
+                    } else {
+                      $('#tkarty').slideUp(1000);
+                    }
+                  });
+              </script>
               <p></p>
+              <div id="tkarty" hidden="hidden">
+              <label>Tankolókártya száma</label>
+              <input type="text" id="tankolokartya" placeholder="pl: 7081678014337910" class="form-control">
+              <p></p>
+            </div>
               <label for="marka">Az autó márkája</label>
               <input type="string" id="marka" class="form-control" placeholder="pl: Skoda" required>
               <p></p>
@@ -189,6 +203,7 @@ function somethingElse() {
   var tipus = $('#tipus').val();
   var fogyasztas = $('#fogyasztas').val();
   var uzemanyag = $('#uzemanyag').val();
+  var tankolokartya = $('#tankolokartya').val();
   var file = new FormData();
   // checking if every input has been filled
     if (rendszam == '' || kategoria == '' || terfogat == '' || marka == '' || tipus == '' || fogyasztas == '' || uzemanyag == '' || $('#file-1').val() == '') {
@@ -201,7 +216,19 @@ function somethingElse() {
         }
       });
     } else {
-
+      if (kategoria == "kartyas") {
+        if (tankolokartya == '') {
+          bootbox.alert({
+            title: "Hiba",
+            message: "Minden mező kitöltése kötelező!",
+            callback: function() {
+              $( '#dolgozunk' ).attr('hidden', 'hidden');
+              $( '#mehet' ).removeAttr('hidden');
+            }
+          });
+          return;
+        }
+      }
 
   bootbox.confirm({
       title: "Adat ellenőrzés",
@@ -247,6 +274,7 @@ $.post( "ajax/ajax.ujautosubmit.php", {
   Postforgalminev: forgalmiNev,
   Postszerzodeshely: szerzodesHely,
   Postszerzodesnev: szerzodesNev,
+  Postkartya: tankolokartya,
 },
 "json").done(function( response ) {
   if (response == "ok") {

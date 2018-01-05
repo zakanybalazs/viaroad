@@ -284,7 +284,7 @@ $("a.iframe").fancybox({
       <th>Időszak</th>
       <th>Igénybevevő cég</th>
       <th>Auitó rendszáma</th>
-      <th>Ősszeg</th>
+      <th>Összeg</th>
       <th>Megtekintés</th>
       <th>Törlés</th>
     </thead>

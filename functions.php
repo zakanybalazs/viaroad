@@ -196,10 +196,10 @@ $safeTulaj = mysqli_real_escape_string($viapanServer, $tulaj);
   }
    ?>
    <?php
-function ujSajatAuto($PostuserName,$Postrendszam,$Postkategoria,$Postmarka,$Posttipus,$Postterfogat,$Postfogyasztas,$Postuzemanyag,$Postforgalmihely,$Postforgalminev,$Postszerzodeshely,$Postszerzodesnev) {
+function ujSajatAuto($PostuserName,$Postrendszam,$Postkategoria,$Postmarka,$Posttipus,$Postterfogat,$Postfogyasztas,$Postuzemanyag,$Postforgalmihely,$Postforgalminev,$Postszerzodeshely,$Postszerzodesnev, $Postkartya) {
 $viapanServer = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");
 $safeTulaj = mysqli_real_escape_string($viapanServer, $PostuserName);
-  $ide = "INSERT INTO autok (rendszam, tulaj,kategoria, marka, tipus, uzemanyag, fogyasztas, terfogat, forgalmihely, forgalminev, szerzodeshely, szerzodesnev) VALUES ('{$Postrendszam}', '{$PostuserName}', '{$Postkategoria}', '{$Postmarka}', '{$Posttipus}','{$Postuzemanyag}' ,'{$Postfogyasztas}', '{$Postterfogat}', '{$Postforgalmihely}', '{$Postforgalminev}', '{$Postszerzodeshely}', '{$Postszerzodesnev}')";
+  $ide = "INSERT INTO autok (rendszam, tulaj,kategoria, marka, tipus, uzemanyag, fogyasztas, terfogat, forgalmihely, forgalminev, szerzodeshely, szerzodesnev, kartyaszam) VALUES ('{$Postrendszam}', '{$PostuserName}', '{$Postkategoria}', '{$Postmarka}', '{$Posttipus}','{$Postuzemanyag}' ,'{$Postfogyasztas}', '{$Postterfogat}', '{$Postforgalmihely}', '{$Postforgalminev}', '{$Postszerzodeshely}', '{$Postszerzodesnev}','{$Postkartya}')";
   $siker = mysqli_query($viapanServer, $ide);
 $kilometer = "INSERT INTO kilometer (rendszam) VALUES ('{$Postrendszam}')";
   $siker2 = mysqli_query($viapanServer, $kilometer);
@@ -251,6 +251,21 @@ function ujUtCeges($userName,$kivCeg,$kivRendszam,$datum,$kolcsonbe,$honnan,$hov
      if (!$siker) { return "Not ok"; } else { return "ok"; }
  }
    ?>
+   <?php
+  function ujUtKartyas($userName,$kivRendszam,$datum,$honnan,$hova,$cel,$kezdokm,$zarokm,$km,$kivFogyasztas,$kivUzemanyag,$kivKep,$kepNev,$idoszak) {
+    $viapanServer = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");
+    //megkezdem megfelelo formaba hozni amiket kell
+    $safeUser = mysqli_real_escape_string($viapanServer, $userName);
+    $safeHonnan = mysqli_real_escape_string($viapanServer, $honnan);
+    $safeHova = mysqli_real_escape_string($viapanServer, $hova);
+    $safeCel = mysqli_real_escape_string($viapanServer, $cel);
+    $safeKep =mysqli_real_escape_string($viapanServer, $kivKep);
+    $safeKepNev = mysqli_real_escape_string($viapanServer, $kepNev);
+    $ide = "INSERT INTO utak (felhasznalo, datum, rendszam, honnan, hova, cel, kezdokm, zarokm, km, fogyasztas, uzemanyag, kep, kepnev,idoszak) VALUES ('{$safeUser}' ,'{$datum}', '{$kivRendszam}', '{$safeHonnan}', '{$safeHova}', '{$safeCel}', '{$kezdokm}', '{$zarokm}', '{$km}', '{$kivFogyasztas}', '{$kivUzemanyag}','{$safeKep}', '{$safeKepNev}','{$idoszak}')";
+    $siker = mysqli_query($viapanServer, $ide);
+      if (!$siker) { return "Not ok"; } else { return "ok"; }
+  }
+    ?>
   <?php
 function getCegTelepByName ($ceg){
 $viapanServer = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");

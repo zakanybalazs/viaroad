@@ -14,92 +14,73 @@ $prevKM = $piszkozatResult['kezdokm'];
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVgzq8IW5TgMx7Xcjz2UOVdgSoSd3Flpo" charset="utf-8"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
 <script type="text/javascript">
-// form validation before submit
-function loadScript(url) {
-  var head = document.getElementsByTagName("head")[0];
-  var script = document.createElement("script");
-  script.type = "text/javascript";
-  script.src = url;
-  head.appendChild(script);
-      var geocoder;
-       if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
-      }
-      //Get the latitude and the longitude;
-      function successFunction(position) {
-         var lat = position.coords.latitude;
-         var lng = position.coords.longitude;
-         codeLatLng(lat, lng)
-      }
-      function errorFunction(){
-        //  alert("Geocoder failed");
-      }
-       function initialize() {
-         geocoder = new google.maps.Geocoder();
-       }
-       function codeLatLng(lat, lng) {
-    var geocoder = new google.maps.Geocoder();
-         var latlng = new google.maps.LatLng(lat, lng);
-         geocoder.geocode({'location': latlng}, function(results, status) {
-           if (status == google.maps.GeocoderStatus.OK) {
-           console.log(results)
-             if (results[1]) {
-              var s = results[1].formatted_address;
-              var here = results[1].place_id;
-              var directionsService = new google.maps.DirectionsService();
-              var request = {
-                origin : '<?php echo "$prevLocation"; ?>',
-                destination : s,
-                travelMode  : google.maps.DirectionsTravelMode.DRIVING
-              };
-              directionsService.route(request, function(response, status) {
-                if (status == google.maps.DirectionsStatus.OK) {
-                  var distance = response.routes[0].legs[0].distance.value;
-                  Number(distance);
-                  var prevKM = <?php echo "$prevKM"; ?>;
-                  Number(prevKM);
-                  var distance3 = Math.round(distance / 1000);
-                   $( '#zarokm' ).attr('value', distance3 + prevKM);
-                }
-              });
-              var n = s.indexOf(',');
-              s = s.substring(0, n != -1 ? n : s.length);
-              document.getElementById('address').value = s;
-             } else {
-              //  alert("No results found");
-             }
-           } else {
-            //  alert("Geocoder failed due to: " + status);
+ // form validation before submit
+    function loadScript(url) {
+      var head = document.getElementsByTagName("head")[0];
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = url;
+      head.appendChild(script);
+          var geocoder;
+           if (navigator.geolocation) {
+             navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+          }
+          //Get the latitude and the longitude;
+          function successFunction(position) {
+             var lat = position.coords.latitude;
+             var lng = position.coords.longitude;
+             codeLatLng(lat, lng)
+          }
+          function errorFunction(){
+            //  alert("Geocoder failed");
+          }
+           function initialize() {
+             geocoder = new google.maps.Geocoder();
            }
-         });
-       }
-
-     }
-      </script>
-      <script>
-        $(document).ready(function() {
-          // navigator.permissions && navigator.permissions.query({name: 'geolocation'}).then(function(PermissionStatus) {
-          //     if(PermissionStatus.state == 'granted') {
-                    //allowed
-                     loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVgzq8IW5TgMx7Xcjz2UOVdgSoSd3Flpo");
-              // } else {
-                   //denied
-          //          bootbox.alert({
-          //              title: "Helmyeghatározás",
-          //              size: "small",
-          //              message: "Kérlek engedélyezd a helmyeghatározást, hogy ne neked kelljen beírni!",
-          //              animate: true,
-          //              backdrop: true,
-          //          });
-          //          loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVgzq8IW5TgMx7Xcjz2UOVdgSoSd3Flpo");
-          //
-          //
-          //   }
-          })
-          </script>
-    <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVgzq8IW5TgMx7Xcjz2UOVdgSoSd3Flpo"></script> -->
+           function codeLatLng(lat, lng) {
+        var geocoder = new google.maps.Geocoder();
+             var latlng = new google.maps.LatLng(lat, lng);
+             geocoder.geocode({'location': latlng}, function(results, status) {
+               if (status == google.maps.GeocoderStatus.OK) {
+               console.log(results)
+                 if (results[1]) {
+                  var s = results[1].formatted_address;
+                  var here = results[1].place_id;
+                  var directionsService = new google.maps.DirectionsService();
+                  var request = {
+                    origin : '<?php echo "$prevLocation"; ?>',
+                    destination : s,
+                    travelMode  : google.maps.DirectionsTravelMode.DRIVING
+                  };
+                  directionsService.route(request, function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                      var distance = response.routes[0].legs[0].distance.value;
+                      Number(distance);
+                      var prevKM = <?php echo "$prevKM"; ?>;
+                      Number(prevKM);
+                      var distance3 = Math.round(distance / 1000);
+                       $( '#zarokm' ).attr('value', distance3 + prevKM);
+                    }
+                  });
+                  var n = s.indexOf(',');
+                  s = s.substring(0, n != -1 ? n : s.length);
+                  document.getElementById('address').value = s;
+                 } else {
+                  //  alert("No results found");
+                 }
+               } else {
+                //  alert("Geocoder failed due to: " + status);
+               }
+             });
+           }
+         }
+ </script>
+<script>
+  $(document).ready(function() {
+      loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVgzq8IW5TgMx7Xcjz2UOVdgSoSd3Flpo");
+    })
+</script>
 <?php
 if (!isset($userName)) {
   ?>
@@ -146,16 +127,20 @@ if (!isset($userName)) {
     $fogyasztasPre = $autoResult['fogyasztas'];
     $uzemanyagPre = $autoResult['uzemanyag'];
     $cegPre = $autoResult['ceg'];
+    $kartya = $autoResult['kategoria'];
+    if ($kartya == "kartyas") {?>
+      <script type="text/javascript">
+      setTimeout(function(){
+          $('#honapzaro').show();
+        }, 500);
+      </script>
+      <?php}
   }
 
     if (!empty($_GET['siker'])) {
       if ($_GET['siker']==1) {
         ?>
         <body onload="initialize()">
-          <div class="container alert alert-success alert-dismissable">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>Sikeresen rögzítve!</strong>
-          </div>
           <?php
         } else {
           ?>
@@ -168,15 +153,162 @@ if (!isset($userName)) {
       }
       ?>
     <body>
-      <script type="text/javascript">
-      function something() {
+<script type="text/javascript">
+          function something() {
+            $( '#mehet' ).attr('hidden','hidden');
+            $( '#dolgozunk' ).removeAttr('hidden');
+            var hova = $( '#address' ).val();
+            var zarokm = $('#zarokm').val();
+            var kezdokm = <?php echo $kezdokmPre ?>;
+            var rendszam = "<?php echo $rendszamPre ?>";
+              if (hova == '' || zarokm == '' ) {
+                bootbox.alert({
+                  title: "Hiba",
+                  message: "Minden mező kitöltése kötelező!",
+                  callback: function() {
+                    $( '#dolgozunk' ).attr('hidden', 'hidden');
+                    $( '#mehet' ).removeAttr('hidden');
+                  }
+                });
+              } else if (kezdokm > zarokm) {
+                bootbox.alert({
+                  title: "Hiba",
+                  message: "Nem lehet kisebb a záró kilóméteróra állás a kezdő kilóméteróra állásnál!"
+              });
+              $( '#dolgozunk' ).attr('hidden', 'hidden');
+              $( '#mehet' ).removeAttr('hidden');
+              } else {
+            var km = zarokm - kezdokm + ' km';
+            if (km < 1 || km == null) {
+              km = "nincs kitöltve";
+            }
+            bootbox.confirm({
+                title: "Adat ellenőrzés",
+                message: '<h4>Kérlek ellenőrizd az adatokat!</h4> <p>Autó rendszáma: ' + rendszam + '</p><p>Útvonal: <?php echo $honnanPre?> - ' + hova + '  </p><p>Megtett távolság: ' + km + '</p><p>Amennyiben helyesnek találod az adatokat, kattints a mehet gombra!</p>',
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Mégsem'
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check fa-success"></i> Mehet'
+                    }
+                },
+                callback: function (result) {
+                  if (result == true) {
+          //this is where we send the data via ajax
+          // $userName,$kivCeg,$kivRendszam,$datum,$kolcsonbe,$honnan,$hova,$cel,$kezdokm,$zarokm,$km,$kivFogyasztas,$kivUzemanyag,$kivKep,$kepNev
+          var userName ="<?php echo "$userName"; ?>";
+          var cegPre = "<?php echo "$cegPre"; ?>";
+          var rendszamPre = "<?php echo $rendszamPre; ?>";
+          var datumPre = "<?php echo "$datumPre"; ?>";
+          var kolcsonbePre = "<?php echo "$kolcsonbePre"; ?>";
+          var honnanPre = "<?php echo "$honnanPre"; ?>";
+          var hova = $( '#address' ).val()
+          var celPre = '<?php if ($_GET['tankolas'] == 1) { echo 'Tankolás'; } else { echo "$celPre"; }?>';
+          var kezdokm = "<?php echo $kezdokmPre; ?>";
+          var zarokm = $('#zarokm').val();
+          var km = zarokm - kezdokm;
+          var fogyasztasPre = <?php echo "$fogyasztasPre"; ?>;
+          var uzemanyagPre = "<?php echo "$uzemanyagPre"; ?>";
+          <?php $kepNev = $datumPre . $rendszamPre.'.jpg'; $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]","}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;","â€”", "â€“", ",", "<", ">", "/", "?"); $clean = trim(str_replace($strip, "", strip_tags($kepNev)));?>
+          var kepnev = "<?php echo $clean ?>";
+          var kepHely = 'uploads/' + kepnev;
+          var tulaj = "<?php echo "$tulajPre"; ?>";
+          var KepFile = new FormData();
+          if ($('#file-1').val() == '') {
+          var kepnev = "N/A";
+          var kepHely = 'uploads/' + kepnev;
+          } else {
+            KepFile.append('kep', $('#file-1').prop('files')[0]);
+          }
+
+          $.post( "ajax/ajax.ujutsubmit.php", {
+            PostuserName: userName,
+            Postceg: cegPre,
+            Postrendszam: rendszamPre,
+            Postdatum: datumPre,
+            Postkolcsonbe: kolcsonbePre,
+            Posthonnan: honnanPre,
+            Posthova: hova,
+            Postcel: celPre,
+            Postkezdokm: kezdokm,
+            Postzarokm: zarokm,
+            Postkm: km,
+            Postfogyasztas: fogyasztasPre,
+            Postuzemanyag: uzemanyagPre,
+            Postkephely: kepHely,
+            Postkepnev: kepnev,
+            Posttulaj: tulaj
+          },
+          "json").done(function( response ) {
+            if (response == "ok") {
+              $.ajax({
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cashe: false,
+                data: KepFile,
+                url: "ajax/ajax.fileupload.php",
+                dataType: 'json',
+                }); //$.ajax file handling
+              // itt kell a filet a helyere rakni
+              $( '#dolgozunk' ).attr('hidden', 'hidden');
+              $( '#mehet' ).removeAttr('hidden');
+              bootbox.alert({
+                  title: "Siker!",
+                  size: "small",
+                  message: "Az adatokat sikeresen rögzítettük!",
+                  animate: true,
+                  backdrop: true,
+                  callback: function() {
+                    window.location.href = "switch.php";
+                  },
+              }); //bootbox siker
+
+            } else { // response ok
+              bootbox.alert({
+                  title: "Hiba",
+                  size: "small",
+                  message: "Probléma történt az adatok rögzítésénél!",
+                  animate: true,
+                  backdrop: true,
+                    }); // bootbox hiba
+                  } // response? ok else
+                }); // done(function) end
+
+
+          } // if result == true
+        }// callback
+      }); //bootbox confirm
+     }// else
+    } // end of something()
+</script>
+<script type="text/javascript">
+      function somethingElse() {
         $( '#mehet' ).attr('hidden','hidden');
         $( '#dolgozunk' ).removeAttr('hidden');
         var hova = $( '#address' ).val();
         var zarokm = $('#zarokm').val();
         var kezdokm = <?php echo $kezdokmPre ?>;
         var rendszam = "<?php echo $rendszamPre ?>";
-          if (hova == '' || zarokm == '' ) {
+        var isKartyas = $('#checkbox').val();
+        if (isKartyas == "unchecked") {
+          var idoszak = $('#zaroidoszak').val();
+          if (idoszak == '') {
+            bootbox.alert({
+              title: "Hiba",
+              message: "Minden mező kitöltése kötelező!",
+              callback: function() {
+                $( '#dolgozunk' ).attr('hidden', 'hidden');
+                $( '#mehet' ).removeAttr('hidden');
+              }
+            });
+            return;
+          }
+        }
+          if (hova == '' || zarokm == ''
+          <?php if ($_GET['tankolas'] == 1)
+          { echo " || $('#file-1').val() == ''"; } ?>) {
             bootbox.alert({
               title: "Hiba",
               message: "Minden mező kitöltése kötelező!",
@@ -199,7 +331,7 @@ if (!isset($userName)) {
         }
         bootbox.confirm({
             title: "Adat ellenőrzés",
-            message: '<h4>Kérlek ellenőrizd az adatokat!</h4> <p>Autó rendszáma: ' + rendszam + '</p><p>Útvonal: <?php echo $honnanPre?> - ' + hova + '  </p><p>Megtett távolság: ' + km + '</p><p>Amennyiben helyesnek találod az adatokat, kattints a mehet gombra!</p>',
+            message: '<h4>Kérlek ellenőrizd az adatokat!</h4> <p>Autó rendszáma: ' + rendszam + '</p><p>Útvonal: <?php echo $honnanPre ?> - ' + hova + '  </p><p>Megtett távolság: ' + km + '</p><p>Amennyiben helyesnek találod az adatokat, kattints a mehet gombra!</p>',
             buttons: {
                 cancel: {
                     label: '<i class="fa fa-times"></i> Mégsem'
@@ -219,13 +351,17 @@ if (!isset($userName)) {
       var kolcsonbePre = "<?php echo "$kolcsonbePre"; ?>";
       var honnanPre = "<?php echo "$honnanPre"; ?>";
       var hova = $( '#address' ).val()
-      var celPre = '<?php if ($_GET['tankolas'] == 1) { echo 'Tankolás'; } else { echo "$celPre"; }?>';
+      var celPre = '<?php echo "$celPre"; ?>';
       var kezdokm = "<?php echo $kezdokmPre; ?>";
       var zarokm = $('#zarokm').val();
       var km = zarokm - kezdokm;
       var fogyasztasPre = <?php echo "$fogyasztasPre"; ?>;
-      var uzemanyagPre = "<?php echo "$uzemanyagPre"; ?>";
-      <?php $kepNev = $datumPre . $rendszamPre.'.jpg'; $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]","}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;","â€”", "â€“", ",", "<", ">", "/", "?"); $clean = trim(str_replace($strip, "", strip_tags($kepNev)));?>
+      var uzemanyagPre = '<?php echo "$uzemanyagPre"; ?>';
+      <?php $kepNev = $datumPre . $rendszamPre . '.jpg'; ?>
+      <?php $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=",
+       "+","[", "{", "]","}", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;","&#8220;", "&#8221;",
+        "&#8211;", "&#8212;","â€”", "â€“", ",", "<", ">", "/", "?"); ?>
+      <?php $clean = trim(str_replace($strip, "", strip_tags($kepNev))); ?>;
       var kepnev = "<?php echo $clean ?>";
       var kepHely = 'uploads/' + kepnev;
       var tulaj = "<?php echo "$tulajPre"; ?>";
@@ -237,7 +373,7 @@ if (!isset($userName)) {
         KepFile.append('kep', $('#file-1').prop('files')[0]);
       }
 
-      $.post( "ajax/ajax.ujutsubmit.php", {
+      $.post( "ajax/ajax.ujtanksubmit.php", {
         PostuserName: userName,
         Postceg: cegPre,
         Postrendszam: rendszamPre,
@@ -253,17 +389,19 @@ if (!isset($userName)) {
         Postuzemanyag: uzemanyagPre,
         Postkephely: kepHely,
         Postkepnev: kepnev,
-        Posttulaj: tulaj
+        Posttulaj: tulaj,
+        Postidoszak: idoszak
       },
       "json").done(function( response ) {
         if (response == "ok") {
+
           $.ajax({
             type: 'POST',
             processData: false,
             contentType: false,
             cashe: false,
             data: KepFile,
-            url: "ajax/ajax.fileupload.php",
+            url: "ajax/ajax.fileuploadtank.php",
             dataType: 'json',
             }); //$.ajax file handling
           // itt kell a filet a helyere rakni
@@ -280,7 +418,7 @@ if (!isset($userName)) {
               },
           }); //bootbox siker
 
-        } else { // response ok
+        } else {
           bootbox.alert({
               title: "Hiba",
               size: "small",
@@ -293,147 +431,10 @@ if (!isset($userName)) {
 
 
       } // if result == true
-    }// callback
-  }); //bootbox confirm
- }// else
-} // end of something()
-      </script>
-<script type="text/javascript">
-function somethingElse() {
-  $( '#mehet' ).attr('hidden','hidden');
-  $( '#dolgozunk' ).removeAttr('hidden');
-  var hova = $( '#address' ).val();
-  var zarokm = $('#zarokm').val();
-  var kezdokm = <?php echo $kezdokmPre ?>;
-  var rendszam = "<?php echo $rendszamPre ?>";
-    if (hova == '' || zarokm == ''
-    <?php if ($_GET['tankolas'] == 1)
-    { echo " || $('#file-1').val() == ''"; } ?>) {
-      bootbox.alert({
-        title: "Hiba",
-        message: "Minden mező kitöltése kötelező!",
-        callback: function() {
-          $( '#dolgozunk' ).attr('hidden', 'hidden');
-          $( '#mehet' ).removeAttr('hidden');
-        }
-      });
-    } else if (kezdokm > zarokm) {
-      bootbox.alert({
-        title: "Hiba",
-        message: "Nem lehet kisebb a záró kilóméteróra állás a kezdő kilóméteróra állásnál!"
-    });
-    $( '#dolgozunk' ).attr('hidden', 'hidden');
-    $( '#mehet' ).removeAttr('hidden');
-    } else {
-  var km = zarokm - kezdokm + ' km';
-  if (km < 1 || km == null) {
-    km = "nincs kitöltve";
-  }
-  bootbox.confirm({
-      title: "Adat ellenőrzés",
-      message: '<h4>Kérlek ellenőrizd az adatokat!</h4> <p>Autó rendszáma: ' + rendszam + '</p><p>Útvonal: <?php echo $honnanPre ?> - ' + hova + '  </p><p>Megtett távolság: ' + km + '</p><p>Amennyiben helyesnek találod az adatokat, kattints a mehet gombra!</p>',
-      buttons: {
-          cancel: {
-              label: '<i class="fa fa-times"></i> Mégsem'
-          },
-          confirm: {
-              label: '<i class="fa fa-check fa-success"></i> Mehet'
-          }
-      },
-      callback: function (result) {
-        if (result == true) {
-//this is where we send the data via ajax
-// $userName,$kivCeg,$kivRendszam,$datum,$kolcsonbe,$honnan,$hova,$cel,$kezdokm,$zarokm,$km,$kivFogyasztas,$kivUzemanyag,$kivKep,$kepNev
-var userName ="<?php echo "$userName"; ?>";
-var cegPre = "<?php echo "$cegPre"; ?>";
-var rendszamPre = "<?php echo $rendszamPre; ?>";
-var datumPre = "<?php echo "$datumPre"; ?>";
-var kolcsonbePre = "<?php echo "$kolcsonbePre"; ?>";
-var honnanPre = "<?php echo "$honnanPre"; ?>";
-var hova = $( '#address' ).val()
-var celPre = '<?php echo "$celPre"; ?>';
-var kezdokm = "<?php echo $kezdokmPre; ?>";
-var zarokm = $('#zarokm').val();
-var km = zarokm - kezdokm;
-var fogyasztasPre = <?php echo "$fogyasztasPre"; ?>;
-var uzemanyagPre = '<?php echo "$uzemanyagPre"; ?>';
-<?php $kepNev = $datumPre . $rendszamPre . '.jpg'; ?>
-<?php $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=",
- "+","[", "{", "]","}", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;","&#8220;", "&#8221;", "&#8211;", "&#8212;","â€”", "â€“", ",", "<", ">", "/", "?"); ?>
-<?php $clean = trim(str_replace($strip, "", strip_tags($kepNev))); ?>;
-var kepnev = "<?php echo $clean ?>";
-var kepHely = 'uploads/' + kepnev;
-var tulaj = "<?php echo "$tulajPre"; ?>";
-var KepFile = new FormData();
-if ($('#file-1').val() == '') {
-var kepnev = "N/A";
-var kepHely = 'uploads/' + kepnev;
-} else {
-  KepFile.append('kep', $('#file-1').prop('files')[0]);
-}
-
-$.post( "ajax/ajax.ujtanksubmit.php", {
-  PostuserName: userName,
-  Postceg: cegPre,
-  Postrendszam: rendszamPre,
-  Postdatum: datumPre,
-  Postkolcsonbe: kolcsonbePre,
-  Posthonnan: honnanPre,
-  Posthova: hova,
-  Postcel: celPre,
-  Postkezdokm: kezdokm,
-  Postzarokm: zarokm,
-  Postkm: km,
-  Postfogyasztas: fogyasztasPre,
-  Postuzemanyag: uzemanyagPre,
-  Postkephely: kepHely,
-  Postkepnev: kepnev,
-  Posttulaj: tulaj
-},
-"json").done(function( response ) {
-  if (response == "ok") {
-
-    $.ajax({
-      type: 'POST',
-      processData: false,
-      contentType: false,
-      cashe: false,
-      data: KepFile,
-      url: "ajax/ajax.fileuploadtank.php",
-      dataType: 'json',
-      }); //$.ajax file handling
-    // itt kell a filet a helyere rakni
-    $( '#dolgozunk' ).attr('hidden', 'hidden');
-    $( '#mehet' ).removeAttr('hidden');
-    bootbox.alert({
-        title: "Siker!",
-        size: "small",
-        message: "Az adatokat sikeresen rögzítettük!",
-        animate: true,
-        backdrop: true,
-        callback: function() {
-          window.location.href = "switch.php";
-        },
-    }); //bootbox siker
-
-  } else {
-    bootbox.alert({
-        title: "Hiba",
-        size: "small",
-        message: "Probléma történt az adatok rögzítésénél!",
-        animate: true,
-        backdrop: true,
-          }); // bootbox hiba
-        } // response? ok else
-      }); // done(function) end
-
-
-} // if result == true
-}// callback
-}); //bootbox confirm
-}// else
-} // end of something()
-
+      }// callback
+      }); //bootbox confirm
+      }// else
+      } // end of something();;
 
 </script>
       <div class="container jumbotron" action="">
@@ -472,7 +473,26 @@ $.post( "ajax/ajax.ujtanksubmit.php", {
           <p></p>
           <h1></h1>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<?php if ($_GET['tankolas'] == 1) {?>
+<?php if ($_GET['tankolas'] == 1) { ?>
+  <div class="row" id="honapzaro" hidden="hidden">
+    <div class="col-lg-12">
+      <div class="col-lg-3 col-md-3 col-sm-3">..</div>
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <input type="checkbox" class="checkbox-lg" id="checkbox" value="checked">
+        <label>Megjelölés hónapzáró tankolásnak</label>
+      </div>
+    </div>
+  </div>
+  <p></p>
+  <div class="row" id="honapzaro_2" hidden="hidden">
+    <div class="col-lg-12">
+      <div class="col-lg-3 col-md-3 col-sm-3">..</div>
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <label>Melyik időszak záró tankolása?</label>
+        <input type="month" id="zaroidoszak" class="form-control">
+      </div>
+    </div>
+  </div>
   <p></p>
       <button onclick="somethingElse()" class="btn btn-default form-control">
         <div id="dolgozunk" hidden="hidden">
@@ -483,7 +503,7 @@ $.post( "ajax/ajax.ujtanksubmit.php", {
       </div>
       </button>
       <p></p>
-      <?php }else { ?>
+      <?php } else { ?>
       <button onclick="something()" class="btn btn-success form-control">
         <div id="dolgozunk" hidden="hidden">
         <i class="fa fa-spinner fa-spin" id="dolgozunk"></i> Dolgozunk
@@ -505,6 +525,18 @@ $.post( "ajax/ajax.ujtanksubmit.php", {
     }
     $( '#' + elementID ).val(val2);
   }
+  $('#checkbox').on('click', function() {
+    var val = $(this).val();
+    if (val == "checked") {
+      $(this).val('unchecked');
+      $('#honapzaro_2').slideDown(1200);
+    } else {
+      $(this).val('checked');
+    }
+  });
+  $('#zaroidoszak').change(function() {
+    alert($(this).val());
+  });
 </script>
   <?php
   mysqli_close($viapanServer);

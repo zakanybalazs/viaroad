@@ -19,8 +19,9 @@ if ( !$viapanServer ) {
  $Postforgalminev = $_POST['Postforgalminev'];
  $Postszerzodeshely = $_POST['Postszerzodeshely'];
  $Postszerzodesnev = $_POST['Postszerzodesnev'];
+ $Postkartya = $_POST['Postkartya'];
 if (!empty($_POST['PostuserName'])) {
-  if(ujSajatAuto($PostuserName,$Postrendszam,$Postkategoria,$Postmarka,$Posttipus,$Postterfogat,$Postfogyasztas,$Postuzemanyag,$Postforgalmihely,$Postforgalminev,$Postszerzodeshely,$Postszerzodesnev)=="ok") {
+  if(ujSajatAuto($PostuserName,$Postrendszam,$Postkategoria,$Postmarka,$Posttipus,$Postterfogat,$Postfogyasztas,$Postuzemanyag,$Postforgalmihely,$Postforgalminev,$Postszerzodeshely,$Postszerzodesnev, $Postkartya)=="ok") {
      $json[]=array(
        "ok"
      );

@@ -25,6 +25,7 @@ if ( !$viapanServer ) {
  $Postkephely = $_POST['Postkephely'];
  $Postkepnev = $_POST['Postkepnev'];
  $Posttulaj = $_POST['Posttulaj'];
+ $Postidoszak = $_POST['Postidoszak'];
 
 switch ($Postkolcsonbe) {
   case 'Meló-Diák Dél Iskolaszövetkezet':
@@ -59,6 +60,30 @@ if (!empty($_POST['PostuserName'])) {
      );
    }
  } else {
+
+$q = "SELECT * FROM autok WHERE rendszam = '{$Postrendszam}'";
+$sq = mysqli_query($viapanServer, $q);
+while($sqa = mysqli_fetch_assoc($sq)) {
+      $kat = $sqa['kategoria'];
+}
+
+if ($kat == "kartyas") {
+  if(ujUtKartyas($PostuserName,$Postrendszam,$Postdatum,$Posthonnan,$Posthova,$Postcel,$Postkezdokm,$Postzarokm,$Postkm,$Postfogyasztas,$Postuzemanyag, $Postkephely, $Postkepnev, $Postidoszak)=="ok") {
+    kilometerUpdate($Postrendszam,$Postzarokm,$Postdatum,$PostuserName);
+    piszkozatUpdate($PostuserName,$Postrendszam,$Postdatum2,$Postkolcsonbe,$Posthova,$Postcel,$Postzarokm);
+    $json[]=array(
+      "ok"
+    );
+} else {
+  # didn't work
+  $json[]=array(
+    "failed"
+  );
+
+}
+} else {
+  # code...
+
    if(ujUtMagan($PostuserName,$Postrendszam,$Postdatum,$Posthonnan,$Posthova,$Postcel,$Postkezdokm,$Postzarokm,$Postkm,$Postfogyasztas,$Postuzemanyag, $Postkephely, $Postkepnev)=="ok") {
      kilometerUpdate($Postrendszam,$Postzarokm,$Postdatum,$PostuserName);
      piszkozatUpdate($PostuserName,$Postrendszam,$Postdatum2,$Postkolcsonbe,$Posthova,$Postcel,$Postzarokm);
@@ -73,7 +98,7 @@ if (!empty($_POST['PostuserName'])) {
 }
 }
 }
-
+}
 header("Content-Type: text/json");
 echo json_encode(array( $json ));
 
