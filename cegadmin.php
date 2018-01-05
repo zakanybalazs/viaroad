@@ -11,6 +11,7 @@ if (!isset($userName)) {
   </script>
 <?php } ?>
   <body>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <div class="container">
       <a id="click" class="btn btn-success" onclick="elrejt()"><strong>+</strong></a>
       <p></p>
@@ -109,47 +110,99 @@ if (!isset($userName)) {
 </div>
 <div class="container jumbotron">
   <h3>MOL ellenörző feltöltése</h3>
-
+  <p></p>
+  <div class="col-lg-4 col-md-4 col-sm-6">
+    <label>Időszak</label>
+  <input type="month" id="idoszak" class="form-control" style="width=60%">
+</div>
+<p></p>
+<div class="col-lg-12" id="filefeltoltes" hidden>
+  <p></p>
+  <input type="file" name="kep" id="file-1" class="inputfile inputfile-2" data-multiple-caption="{count} files selected" multiple required />
+  <label for="file-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path
+     d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/>
+   </svg> <span>CSV feltöltése</span></label>
+</div>
+<div class="container">
+<table class="table table-striped table-hover">
+  <thead>
+    <th>Név</th>
+    <th>Rendszám</th>
+    <th>Lezárva</th>
+  </thead>
+  <tbody id="setBody">
+  </tbody>
+</table>
+</div>
+<script type="text/javascript">
+  $('#idoszak').change(function() {
+    $('setBody').empty();
+    var idoszak = $(this).val();
+      $.post("ajax/ajax.getKartya.php", {
+        idoszak: idoszak,
+      },
+      "json").done(function( response ) {
+        console.log(response);
+        if (response != "error") {
+          var x = 0;
+          for (var i = 0; i < response.length; i++) {
+            var tbody = $('#setBody');
+            if (response[i].isSet == 'set') {
+              var indicator = "<i style='color:#a0cc3a' class='fa fa-check' aria-hidden='true'></i>";
+              x++;
+            } else {
+              var indicator = "<i style='color:red' class='fa fa-times' aria-hidden='true'></i>";
+            }
+            var string = "<tr><td>"+response[i].nev+"</td><td>"+response[i].rendszam+"</td><td>"+indicator+"</td></tr>";
+            tbody.append(string);
+          }
+          if (i == x) {
+            $('#filefeltoltes').slideDown(1200);
+          }
+        }
+      });
+  });
+</script>
 </div>
 
   </body>
 <script type="text/javascript">
-      document.getElementById('filecsoportos').onchange = function(){
-      var arr = [];
-      var file = this.files[0];
-      var reader = new FileReader();
-      reader.onload = function(progressEvent) {
-        // Entire file
-
-        // By lines
-        var lines = this.result.split('\n');
-        console.log(lines);
-        console.log(lines.lenght)
-        var i = 0;
-        setTimeout(function(){
-        while (lines) {
-          var str = lines[i].replace(/\"/g, '');
-          console.log(lines[i]);
-          var str = str.split(';');
-          var sor = str[0];
-          var nev = str[1];
-          var jel = str[2];
-          var array = new Array({sor: sor, nev:nev, jel:jel});
-          // var array = new Array({nevek: nev, kirendeltseg:kir});
-        // console.log(str);
-
-            $.post("ajax/ajax.insert.php", {
-              Ptable: 'diszk',
-              data: array,
-            },
-            "json");
-          i += 1;
-        }
-      }, 120);
-
-      };
-      reader.readAsText(file);
-      }
+      // document.getElementById('filecsoportos').onchange = function(){
+      // var arr = [];
+      // var file = this.files[0];
+      // var reader = new FileReader();
+      // reader.onload = function(progressEvent) {
+      //   // Entire file
+      //
+      //   // By lines
+      //   var lines = this.result.split('\n');
+      //   console.log(lines);
+      //   console.log(lines.lenght)
+      //   var i = 0;
+      //   setTimeout(function(){
+      //   while (lines) {
+      //     var str = lines[i].replace(/\"/g, '');
+      //     console.log(lines[i]);
+      //     var str = str.split(';');
+      //     var sor = str[0];
+      //     var nev = str[1];
+      //     var jel = str[2];
+      //     var array = new Array({sor: sor, nev:nev, jel:jel});
+      //     // var array = new Array({nevek: nev, kirendeltseg:kir});
+      //   // console.log(str);
+      //
+      //       $.post("ajax/ajax.insert.php", {
+      //         Ptable: 'diszk',
+      //         data: array,
+      //       },
+      //       "json");
+      //     i += 1;
+      //   }
+      // }, 120);
+      //
+      // };
+      // reader.readAsText(file);
+      // }
         function feltolt() {
           var nev_val = $('#nev').val();
           var kir = $('#kir').val();
