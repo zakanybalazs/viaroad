@@ -13,7 +13,7 @@ while($sqa = mysqli_fetch_assoc($sq)) {
 
 }
 
-if ($egyseg != "nincs") {
+if ($egyseg == "nincs") {
   // ha nincs pont arra az idoszakra, akkor a legutolso
   $q = "SELECT * FROM amortizacio ORDER BY id ASC";
   $sq = mysqli_query($viapanServer, $q);

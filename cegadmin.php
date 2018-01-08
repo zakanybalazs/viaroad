@@ -161,9 +161,7 @@ if (!isset($userName)) {
    </svg> <span>CSV feltöltése</span></label>
   </div>
   <div class="col-lg-12 col-md-12"></div>
-  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6"><p></p>
-    <button type="button" onclick="kartyas_elszamolas()" class="btn btn-success form-control" disabled>Elszámolás</button>
-  </div>
+  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6"><p></p> </div>
 </div>
 <div class="container">
 <table class="table table-striped table-hover">
@@ -184,8 +182,9 @@ if (!isset($userName)) {
       idoszak: idoszak,
     },
     "json").done(function( response ) {
-      console.log(response);
-      $('#amortizacio').val(response[0].egyseg);
+      console.log(response[0]);
+        $('#amortizacio').val(response[0].egyseg);
+
       $('#amortizacio_ervenyesseg').val(response[0].ervenyes);
     });
       $.post("ajax/ajax.getKartya.php", {
@@ -259,7 +258,34 @@ if (!isset($userName)) {
       console.log(arr);
       };
       reader.readAsText(file);
+      bootbox.confirm({
+        size: "small",
+        message: "Biztosan szeretnéd az elszámolásokat elkészíteni?",
+        callback: function(result){
+          console.log(result);
+          if (result == false) {
+            return;
+          } else {
+            console.log('saving...');
+            $.post("ajax/ajax.logcsv.php", {
+              editor: "<?php echo $userName ?>",
+              csv: arr,
+            },
+            "json");
+          }
+        }
+      });
+        $.post("pdfcreator4.php", {
+          item1: a,
+          item2: b,
+        },
+        "json").done(function( response ) {
+          if (response != "error") {
+          }
+        });
+
     }
+
         function feltolt() {
           var nev_val = $('#nev').val();
           var kir = $('#kir').val();
