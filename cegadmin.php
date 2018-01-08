@@ -1,6 +1,7 @@
 <?php
 session_start();
 //$viapanServer = mysqli_connect("localhost","root","ASDW1298","viapan");
+// this is getting a push
 include "functions.php";
 include 'css/headerAdmin.php';
 $userName = $_SESSION['userName'];
@@ -258,7 +259,7 @@ if (!isset($userName)) {
       console.log(arr);
       };
       reader.readAsText(file);
-      }
+    }
         function feltolt() {
           var nev_val = $('#nev').val();
           var kir = $('#kir').val();
