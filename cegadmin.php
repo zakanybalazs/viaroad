@@ -124,31 +124,7 @@ if (!isset($userName)) {
   <input type="month" id="amortizacio_ervenyesseg" value=""class="form-control">
   <p></p>
   <button type="button" onclick="amortizacio()" class="btn btn-success">Rögzítés újként</button>
-  <script type="text/javascript">
-    function amortizacio() {
-      var dij = $('#amortizacio').val();
-      var ervenyes = $('#amortizacio_ervenyesseg').val();
-      if (dij == '' || ervenyes == '') {
-        bootbox.alert({
-          title: "Hiba",
-          message: "Minden mező kitöltése kötelező!",
-        });
-        return;
-      }
-      $.post("ajax/ajax.uj_amort.php", {
-        dij: dij,
-        ervenyes: ervenyes,
-      },
-      "json").done(function( response ) {
-        if (response != "ok") {
-          bootbox.alert({
-            title: "Siker",
-            message: "Sikeresen rögzítettük.",
-          });
-        }
-      });
-    }
-  </script>
+
 </div>
 <p></p>
 <div class="col-lg-12" id="filefeltoltes" hidden>
@@ -182,6 +158,7 @@ if (!isset($userName)) {
       idoszak: idoszak,
     },
     "json").done(function( response ) {
+      console.log("amortizacio");
       console.log(response[0]);
         $('#amortizacio').val(response[0].egyseg);
 
@@ -191,6 +168,7 @@ if (!isset($userName)) {
         idoszak: idoszak,
       },
       "json").done(function( response ) {
+        console.log("kartyas auto tulajok + statusz");
         console.log(response);
         if (response != "error") {
           var x = 0;
@@ -214,11 +192,11 @@ if (!isset($userName)) {
       });
   });
 </script>
-</div>
-
+  </div>
   </body>
+
 <script type="text/javascript">
-      document.getElementById('file-1').onchange = function(){
+      document.getElementById('file-1').onchange = function() {
       var arr = [];
       var file = this.files[0];
       var reader = new FileReader();
@@ -249,12 +227,14 @@ if (!isset($userName)) {
             rendszam: rendszam,
             kilometeroraallas: kilometeroraallas,
             egysegar: egysegar,
-            osszeg: osszeg});
+            osszeg: osszeg
+          });
             arr[i-1] = array[0];
         }
         i += 1;
       }
       }, 120);
+      console.log("array sent: ");
       console.log(arr);
       };
       reader.readAsText(file);
@@ -262,193 +242,89 @@ if (!isset($userName)) {
         size: "small",
         message: "Biztosan szeretnéd az elszámolásokat elkészíteni?",
         callback: function(result){
+          console.log("bootbox answer: ");
           console.log(result);
           if (result == false) {
             return;
-          } else {
+          }
             console.log('saving...');
             $.post("ajax/ajax.logcsv.php", {
-              editor: "<?php echo $userName ?>",
-              csv: arr,
+              csv: arr
             },
             "json");
-          }
-        }
-      });
-        $.post("pdfcreator4.php", {
-          item1: a,
-          item2: b,
-        },
-        "json").done(function( response ) {
-          if (response != "error") {
-          }
-        });
 
-    }
-
-        function feltolt() {
-          var nev_val = $('#nev').val();
-          var kir = $('#kir').val();
-          var array = new Array({nev: nev_val, kirendeltseg:kir});
-          $.post("ajax/ajax.insert.php", {
-            Ptable: 'nevek',
-            data: array,
-          },
-          "json").done(function( response ) {
-            if (response == "ok") {
-              var next = "<tr><td>"+nev_val+"</td><td>"+kir+"</td></tr>"
-              $('#tbody').append(next);
+            var kartyak = new Array();
+            for (var w = 0; w < arr.length; w++) {
+                var kartya = arr[w].kartyaszam;
+                kartyak[w] = kartya;
             }
-          });
-          }
-  </script>
-  <script type="text/javascript">
-    function ajaxMent(Id, nev, telep, dij) {
-      var PCeg = document.getElementById(nev).innerText;
-      var PTelep = document.getElementById(telep).innerText;
-      var PDij = document.getElementById(dij).innerText;
-      if (PCeg == '' || PTelep == '' || Id == '' ) {
-        bootbox.alert({
-          title: "Hiba",
-          message: "Minden mező kitöltése kötelező!",
-        });
-      } else {
-        $.post( "ajax/ajax.ujcegedit.php", {
-          PostCeg : PCeg,
-          PostTelep : PTelep,
-          id : Id,
-          PostDij : PDij
-        },
-        "json" ).done(function( response ) {
-            if (response == "ok") {
-              bootbox.alert({
-                  title: "Siker!",
-                  size: "small",
-                  message: "Az adatokat sikeresen rögzítettük!",
-                  animate: true,
-                  backdrop: true,
-                  callback: function() {
-                    window.location.href = "cegadmin.php";
-                  },
-              }); //bootbox siker
-            } else {
-              bootbox.alert({
-                  title: "Hiba",
-                  size: "small",
-                  message: "Probléma történt az adatok rögzítésénél!",
-                  animate: true,
-                  backdrop: true,
-                    }); // bootbox hiba
-                  } // response? ok else
-                }); // done(function) end
-            }
-
-
-        }
-    </script>
-  <script type="text/javascript">
-    function torlesc(id) {
-      bootbox.confirm({
-        title: "Megerősítés",
-        message: '<h3>Biztosan törölni akarod a céget az adatbázisből?</h3>',
-        buttons: {
-            cancel: {
-                label: '<i class="fa fa-times"></i> Mégsem'
-            },
-            confirm: {
-                label: '<i class="fa fa-check fa-success"></i> Mehet'
-            }
-        },
-        callback: function(result) {
-          if (result == true) {
-            $.post('ajax/ajax.torlesceg.php',{
-              PostId: id
-            }, "json").done(function(response){
-              if (response == "ok") {
-                bootbox.alert({
-                    title: "Siker!",
-                    size: "small",
-                    message: "Az adatokat sikeresen töröltük!",
-                    animate: true,
-                    backdrop: true,
-                    callback: function() {
-                      $('#' + id + 'tr').fadeOut(800);
-                    },
-                }); //bootbox siker
-              } else {
-                bootbox.alert({
-                    title: "Hiba",
-                    size: "small",
-                    message: "Probléma történt az adatok törlésénél!",
-                    animate: true,
-                    backdrop: true,
-                      }); // bootbox hiba
-              }
+            console.log("kartyak a csv-ben: ");
+            console.log(kartyak);
+            var uniqueKartyak = kartyak.filter(function(item, index, kartyak) {
+              return index == kartyak.indexOf(item);
             });
-          }
+            console.log("egyedi kartyak: ");
+            console.log(uniqueKartyak);
+            var uniqueKartyakJSON = JSON.stringify(uniqueKartyak);
+            $.post("ajax/ajax.getKartyasAuto.php", {
+              array: uniqueKartyakJSON
+            },
+            "json").done(function(res) {
+                console.log("Kartyak rendszammal: ");
+                console.log(res);
+                var rendszamIndexek = new Array();
+
+                for (var t = 0; t < res.length;t++) {
+                  var CSVindex = new Array();
+                  var rendszam = res[t].rendszam;
+                  var kartyaszam = res[t].kartyaszam;
+                  rendszamIndexek.push(rendszam,kartyaszam,CSVindex);
+                }
+                var t = 0;
+                for (var s = 0; s < res.length; s++) {
+                  for (var z = 0; z < kartyak.length; z++) {
+                    var tplusz = t + 1;
+                    var kartyaszam = rendszamIndexek[tplusz];
+                    var krt = kartyak[z];
+                    if (kartyaszam == krt) {
+                      // push to CSVindex
+                      rendszamIndexek[t+2].push(z);
+                    }
+                  }
+                  var t = t + 3;
+                }
+                console.log("kuldendo:");
+                console.log(rendszamIndexek);
+                for (var i = 0; i < rendszamIndexek.length; i+=3) {
+                  var rendszam = rendszamIndexek[i];
+                  var kartyaszam = rendszamIndexek[i+1];
+                  var indexek = JSON.stringify(rendszamIndexek[i+2]);
+                  var csv = JSON.stringify(arr);
+                  $.post("pdfcreator4.php", {
+                    rendszam: rendszam,
+                    kartyaszam: kartyaszam,
+                    indexek: indexek,
+                    csv: arr
+                  },
+                  "json").done(function( response ) {
+
+                  });
+                }
+            });
         }
       });
+    //  ki kell válogatni, hogy melyik autókra kell késziteni elszámolást
+
+        // $.post("pdfcreator4.php", {
+        //   item1: a,
+        //   item2: b,
+        // },
+        // "json").done(function( response ) {
+        //   if (response != "error") {
+        //   }
+        // });
+
     }
   </script>
-  <script type="text/javascript">
-    function elrejt() {
-      $('#hidewell').removeAttr('hidden');
-      $('#click').removeAttr('onclick');
-      $('#click').attr('onclick','felfed()');
-      $('#buttontext').removeAttr('class');
-      $('#buttontext').attr('class', 'glyphicon glyphicon-minus-sign');
-    }
-  </script>
-  <script type="text/javascript">
-    function felfed() {
-      $('#hidewell').attr('hidden', 'hidden');
-      $('#click').removeAttr('onclick');
-      $('#click').attr('onclick','elrejt()');
-      $('#buttontext').removeAttr('class');
-      $('#buttontext').attr('class', 'glyphicon glyphicon-plus-sign');
-    }
-  </script>
-  <script type="text/javascript">
-    function sendNew() {
-      var ceg = $('#ceg').val();
-      var telep = $('#telep').val();
-      var id = $('#id').val();
-      var dij = $('#dij').val();
-      if (ceg == '' || telep == '' || id == '' || dij == '') {
-        bootbox.alert({
-          title: "Hiba",
-          message: "Minden mező kitöltése kötelező!",
-        });
-      } else {
-        $.post( "ajax/ajax.ujcegsubmit.php", {
-          PostCeg : ceg,
-          PostTelep : telep,
-          PostId : id,
-          PostDij : dij
-        },
-        "json" ).done(function( response ) {
-            if (response == "ok") {
-              bootbox.alert({
-                  title: "Siker!",
-                  size: "small",
-                  message: "Az adatokat sikeresen rögzítettük!",
-                  animate: true,
-                  backdrop: true,
-                  callback: function() {
-                    window.location.href = "cegadmin.php";
-                  },
-              }); //bootbox siker
-            } else {
-              bootbox.alert({
-                  title: "Hiba",
-                  size: "small",
-                  message: "Probléma történt az adatok rögzítésénél!",
-                  animate: true,
-                  backdrop: true,
-                    }); // bootbox hiba
-                  } // response? ok else
-                }); // done(function) end
-            }
-        }
-  </script>
+  <script src="cegfunctions.js" charset="utf-8"></script>
 </html>
