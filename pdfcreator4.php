@@ -16,10 +16,47 @@ $pdf->Cell(0,20,utf8_decode("ÚTNYILVÁNTARTÁS"),0,1,"C");
 
 $pdf->SetFont("LiberationMono-Regular","","9"); // mindenhol ujra kell meghatarozni a fontot
 
-$rendszam = $_POST['rendszam'];
-$idoszak = $_POST['idoszak'];
-$arr = $_POST['arr'];
+// $rendszam = $_POST['rendszam'];
+$rendszam = "VIA123";
+// $idoszak = $_POST['idoszak'];
+$idoszak = "2018-02";
+$idoszak = date("Y-m",strtotime($idoszak));
+$idoszakk = strtotime($idoszak);
+$idoszakMinusz = date('Y-m',strtotime("- 1 month",$idoszakk));
+// $kartyaszam = $_POST['kartyaszam'];
+$kartyaszam = "7081678014337919";
+// $indexek = json_decode($_POST['indexek']);
+$indexek = [0,1,2];
+// $csv = json_decode($_POST['csv']);
+$csv = array(
+  0 => [
+    'date' => '2017-12-31',
+    'kartyaszam' => '7081678014337919',
+    'ceg' => 'Duna-Humán Kft.',
+    'kilometeroraallas' => 13400,
+    'egysegar' => '360,59',
+    'osszeg' => '26629,01',
+  ],
+  1 => [
+    'date' => '2018-01-08',
+    'kartyaszam' => '7081678014337919',
+    'ceg' => 'Duna-Humán Kft.',
+    'kilometeroraallas' => 13507,
+    'egysegar' => '349,2924',
+    'osszeg' => '15529',
+  ],
+  2 => [
+    'date' => '2018-01-31',
+    'kartyaszam' => '7081678014337919',
+    'ceg' => 'Duna-Humán Kft.',
+    'kilometeroraallas' => 13599,
+    'egysegar' => '360,59',
+    'osszeg' => '26629,01',
+  ],
+);
+// Ehhez igazitva létre kell hozni egy MOLos csv-t, hogy ki lehessen próbálni.
 
+$ceg = $csv[0]['ceg'];
 $pdf->Cell(0,5,iconv('utf-8', 'iso-8859-2',"$ceg"),0,1,"C");
 
 $pdf->Line(10,40,200,40);
@@ -42,6 +79,11 @@ while ($autoAdatok = mysqli_fetch_assoc($tulajSendQ)) {
   $fogyasztas = $autoAdatok['fogyasztas'];
   $terfogat = $autoAdatok['terfogat'];
 }
+$q = "SELECT * FROM autok WHERE kartyaszam = '{$kartyaszam}'";
+$sq = mysqli_query($viapanServer, $q);
+while($sqa = mysqli_fetch_assoc($sq)) {
+      $userName = $sqa['tulaj'];
+}
 $userName = mysqli_real_escape_string($viapanServer, $userName);
 $userID = getUserId($userName);
 
@@ -57,41 +99,52 @@ while ($szemelyAdatok = mysqli_fetch_assoc($szemelySendQ)) {
   $szuletesihely = $szemelyAdatok['szuletesihely'];
   $szolgalatihely = $szemelyAdatok['szolgalatihely'];
 }
-$uzemanyagQ = "SELECT * FROM uzemanyagar WHERE ervenyes < '{$kezdo}' AND tipus = '{$uzemanyag}'";
-$uzemanyagSendQ = mysqli_query($viapanServer,$uzemanyagQ);
-$aid = 0;
-while ($uzemanyagAdatok = mysqli_fetch_assoc($uzemanyagSendQ)) {
-  $ennyi = $uzemanyagAdatok['ar'];
-  $bid = $uzemanyagAdatok['id'];
-  if ($ennyi > $aid) {
-    $aid = $ennyi;
-  }
-}
 
 $sor1 = iconv('utf-8', 'iso-8859-2',"       Neve: $vezeteknev $keresztnev                          Lakcíme: $lakcim");
-$pdf->Cell(0,0,$sor1,0,1,"L");
+$pdf->Cell(0,8,$sor1,0,1,"L");
 
 $sor2 = iconv('utf-8', 'iso-8859-2',"       Adószáma: $adoszam                          Szül.idő, hely: $szuletesiido, $szuletesihely");
-$pdf->Cell(0,15,$sor2,0,1,"L");
+$pdf->Cell(0,8,$sor2,0,1,"L");
 
 $sor3 = iconv('utf-8', 'iso-8859-2',"       Beosztása: $beosztas                         Szolg. hely: $szolgalatihely");
-$pdf->Cell(0,0,$sor3,0,1,"L");
+$pdf->Cell(0,8,$sor3,0,1,"L");
 
 $sor4 = iconv('utf-8', 'iso-8859-2',"       F.Rendszám: $rendszam                           Márka, típus: $marka, $tipus");
-$pdf->Cell(0,15,$sor4,0,1,"L");
-
-$sor5 = iconv('utf-8', 'iso-8859-2',"       Üzemanyag ár: $ennyi Ft/L                       Norma: $fogyasztas L/100Km");
-$pdf->Cell(0,0,$sor5,0,1,"L");
+$pdf->Cell(0,8,$sor4,0,1,"L");
 
 $sor6 = iconv('utf-8', 'iso-8859-2',"       Löktérfogat: $terfogat cm3                         Üzemanyag: $uzemanyag");
-$pdf->Cell(0,15,$sor6,0,1,"L");
+$pdf->Cell(0,8,$sor6,0,1,"L");
 
 $pdf->Line(10,105,200,105);
+
+$q = "SELECT * FROM utak WHERE idoszak = '{$idoszakMinusz}'";
+$sq = mysqli_query($viapanServer, $q);
+while($sqa = mysqli_fetch_assoc($sq)) {
+      $elsoNapKm = $sqa['zarokm'];
+}
+
+$pdf->Cell(0,10,'',0,1,"L"); // úres, hogy eltolja az alatta lévő cellákat
+
+$elsonap = iconv('utf-8', 'iso-8859-2',"Első nap km: ".$elsoNapKm);
+$pdf->Text(15,112,$elsonap);
+
+$q = "SELECT * FROM utak WHERE idoszak = '{$idoszak}'";
+$sq = mysqli_query($viapanServer, $q);
+while($sqa = mysqli_fetch_assoc($sq)) {
+      $utolsoNapKm = $sqa['zarokm'];
+}
+
+$utolsonap = iconv('utf-8', 'iso-8859-2',"Utolsó nap km: ".$utolsoNapKm);
+$pdf->Text(125,112,$utolsonap);
+
+
 $pdf->Cell(0,10,'',0,1,"L"); // úres, hogy eltolja az alatta lévő cellákat
 $fejlec1 =  iconv('utf-8', 'iso-8859-2',"Kiküldetési utasítás");
 $pdf->Cell(0,8,$fejlec1,1,1,"C");
-$fejlec2 =  iconv('utf-8', 'iso-8859-2'," VID       Dátum              Viszonylata                         Célja              Megtett km");
+$pdf->SetFont("LiberationMono-Regular","","7"); // mindenhol ujra kell meghatarozni a fontot
+$fejlec2 =  iconv('utf-8', 'iso-8859-2'," VID    Dátum        Viszonylata            Induló/Érkező/Megtett km       Célja          Üzemanyag költség    Amortizációs díj ");
 $pdf->Cell(0,8,$fejlec2,1,1,"L");
+
 
 
 $utakQ = "SELECT * FROM utak WHERE rendszam = '{$rendszam}'";
@@ -99,29 +152,37 @@ $utakSendQ = mysqli_query($viapanServer,$utakQ);
 $km = 0;
 $x = 0;
 while ($rows = mysqli_fetch_assoc($utakSendQ)) {
-  if ($rows["datum"] >= $kezdo && $rows["datum"] <= $vege) {
+  if ($rows["datum"] >= $idoszakMinusz && $rows["datum"] <= $idoszak) {
     $x = $x + 1;
     $km = $km + $rows["km"];
     $utID = $rows['id'];
+    $kezdokm = $rows['kezdokm'];
+    $zarokm = $rows['zarokm'];
     $utKM = $rows["km"];
     $utDatum = $rows["datum"];
     $utHonnan = $rows["honnan"];
     $utHova = $rows["hova"];
     $utCel = $rows["cel"];
 
+    //ki kell számolni az amortizációs és üzemanyag költséget
+
     $datumTT = date_create($utDatum);
-    $datumFormat = date_format($datumTT,'Y-m-d H:i');
+    $datumFormat = date_format($datumTT,'Y-m-d');
     $z = $pdf->GetX();
     $y = $pdf->GetY();
     $pdf->SetXY(10, $y);
     $table1 =  iconv('utf-8', 'iso-8859-2'," $utID  $datumFormat");
     $pdf->MultiCell(45,8,$table1,"TBL","J");
 
-    $pdf->SetXY(55, $y);
+    $pdf->SetXY(20, $y);
     $table1 =  iconv('utf-8', 'iso-8859-2',"$utHonnan - $utHova");
     $pdf->MultiCell(65,8,$table1,"TB","C");
 
-    $pdf->SetXY(116, $y);
+    $pdf->SetXY(64, $y);
+    $table2 = iconv('utf-8', 'iso-8859-2',"$kezdokm / $zarokm / $utKM");
+    $pdf->MultiCell(59,8,$table2,"TB","C");
+
+    $pdf->SetXY(98, $y);
     $table2 = iconv('utf-8', 'iso-8859-2',"$utCel");
     $pdf->MultiCell(59,8,$table2,"TB","C");
 
@@ -132,52 +193,52 @@ while ($rows = mysqli_fetch_assoc($utakSendQ)) {
 
   }
 }
-$osszesen =  iconv('utf-8', 'iso-8859-2',"összesen megtett km: $km");
-$pdf->Cell(0,8,$osszesen,0,1,"R");
+// $osszesen =  iconv('utf-8', 'iso-8859-2',"összesen megtett km: $km");
+$pdf->Cell(0,8,"osszesen",0,1,"R");
 $pdf->Cell(0,10,utf8_decode("Költségelszámolás"),0,1,"L");
-$keplet = ($ennyi * $fogyasztas) / 100 * $km;
-$keplet2 = 9 * $km;
-$osszesen2 = $keplet + $keplet2;
-$keplet = round($keplet);
-$keplet = penz($keplet);
-$ktg1 =  iconv('utf-8', 'iso-8859-2',"$ennyi.- Ft / liter X $fogyasztas liter / 100Km X $km km   =                    $keplet Ft");
-$pdf->Cell(0,8,$ktg1,1,1,"R");
-$keplet2 = penz($keplet2);
-$ktg2 =  iconv('utf-8', 'iso-8859-2',"9.- Ft / km X $km km  =                    $keplet2 Ft");
-$pdf->Cell(0,8,$ktg2,1,1,"R");
+// $keplet = ($ennyi * $fogyasztas) / 100 * $km;
+// $keplet2 = 9 * $km;
+// $osszesen2 = $keplet + $keplet2;
+// $keplet = round($keplet);
+// $keplet = penz($keplet);
+// $ktg1 =  iconv('utf-8', 'iso-8859-2',"$ennyi.- Ft / liter X $fogyasztas liter / 100Km X $km km   =                    $keplet Ft");
+// $pdf->Cell(0,8,$ktg1,1,1,"R");
+// $keplet2 = penz($keplet2);
+// $ktg2 =  iconv('utf-8', 'iso-8859-2',"9.- Ft / km X $km km  =                    $keplet2 Ft");
+// $pdf->Cell(0,8,$ktg2,1,1,"R");
+//
+// $osszesen2 = round($osszesen2);
+// $osszesen2 = penz($osszesen2);
+// $ktg2 =  iconv('utf-8', 'iso-8859-2',"Összesen:                              $osszesen2 Ft ");
+// $pdf->Cell(0,8,$ktg2,0,1,"R");
+// $y = $pdf->GetY();
+// $pdf->SetXY(10, $y + 5);
+// $kocka1 =  iconv('utf-8', 'iso-8859-2'," A költségelszámolás végösszegét felvettem:");
+// $pdf->MultiCell(70,8,$kocka1,"LRT","C");
+//
+// $pdf->SetXY(10, $y + 20);
+// $maiDatum = date("Y/m/d");
+// $kocka2 =  iconv('utf-8', 'iso-8859-2',"Dátum: ");
+// $pdf->MultiCell(70,20,$kocka2,"LR","C");
+// $pdf->SetXY(10, $y + 40);
+// $kocka3 =  iconv('utf-8', 'iso-8859-2',"$vezeteknev $keresztnev aláírása");
+// $pdf->MultiCell(70,6,$kocka3,1,"C");
+//
+//
+// $pdf->SetXY(130, $y + 5);
+// $kocka1 =  iconv('utf-8', 'iso-8859-2',"A kiküldetést elrendelő bélyegzője és aláírása:");
+// $pdf->MultiCell(70,8,$kocka1,"LRT","C");
+//
+// $pdf->SetXY(130, $y + 20);
+// $maiDatum = date("Y/m/d");
+// $kocka2 =  iconv('utf-8', 'iso-8859-2',"");
+// $pdf->MultiCell(70,20,$kocka2,"LR","C");
+// $pdf->SetXY(130, $y + 40);
+// $kocka3 =  iconv('utf-8', 'iso-8859-2',"aláírás, Ph.");
+// $pdf->MultiCell(70,6,$kocka3,1,"C");
+//
 
-$osszesen2 = round($osszesen2);
-$osszesen2 = penz($osszesen2);
-$ktg2 =  iconv('utf-8', 'iso-8859-2',"Összesen:                              $osszesen2 Ft ");
-$pdf->Cell(0,8,$ktg2,0,1,"R");
-$y = $pdf->GetY();
-$pdf->SetXY(10, $y + 5);
-$kocka1 =  iconv('utf-8', 'iso-8859-2'," A költségelszámolás végösszegét felvettem:");
-$pdf->MultiCell(70,8,$kocka1,"LRT","C");
-
-$pdf->SetXY(10, $y + 20);
-$maiDatum = date("Y/m/d");
-$kocka2 =  iconv('utf-8', 'iso-8859-2',"Dátum: ");
-$pdf->MultiCell(70,20,$kocka2,"LR","C");
-$pdf->SetXY(10, $y + 40);
-$kocka3 =  iconv('utf-8', 'iso-8859-2',"$vezeteknev $keresztnev aláírása");
-$pdf->MultiCell(70,6,$kocka3,1,"C");
-
-
-$pdf->SetXY(130, $y + 5);
-$kocka1 =  iconv('utf-8', 'iso-8859-2',"A kiküldetést elrendelő bélyegzője és aláírása:");
-$pdf->MultiCell(70,8,$kocka1,"LRT","C");
-
-$pdf->SetXY(130, $y + 20);
-$maiDatum = date("Y/m/d");
-$kocka2 =  iconv('utf-8', 'iso-8859-2',"");
-$pdf->MultiCell(70,20,$kocka2,"LR","C");
-$pdf->SetXY(130, $y + 40);
-$kocka3 =  iconv('utf-8', 'iso-8859-2',"aláírás, Ph.");
-$pdf->MultiCell(70,6,$kocka3,1,"C");
-
-
-$name = "uploads/elszamolasok/TIG $rendszam $vege.pdf";
-// $pdf->Output(); // ha esetleg nem akarjuk egyből letölteni
-$pdf->Output("F",$name,TRUE); //ennek kell leghátul lennie (autómatikus letöltés)
+// $name = "uploads/elszamolasok/TIG $rendszam $vege.pdf";
+ $pdf->Output(); // ha esetleg nem akarjuk egyből letölteni
+//$pdf->Output("F",$name,TRUE); //ennek kell leghátul lennie (autómatikus letöltés)
 ?>

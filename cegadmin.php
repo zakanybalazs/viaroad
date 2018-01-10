@@ -215,8 +215,8 @@ if (!isset($userName)) {
           var date = date.split(" ")[0];
           var kartyaszam = str[6];
           var kartyaszam = kartyaszam.replace(/\s/g, '');
-          var rendszam = str[7];
-          var rendszam = rendszam.replace(/\s/g, '');
+          var ceg = str[4];
+          var ceg = rendszam.replace(/\s/g, '');
           var kilometeroraallas = str[8];
           var kilometeroraallas = kilometeroraallas.replace(/\s/g, '');
           var egysegar = str[27];
@@ -224,7 +224,7 @@ if (!isset($userName)) {
           var array = new Array({
             date: date,
             kartyaszam:kartyaszam,
-            rendszam: rendszam,
+            ceg: ceg,
             kilometeroraallas: kilometeroraallas,
             egysegar: egysegar,
             osszeg: osszeg
@@ -298,11 +298,13 @@ if (!isset($userName)) {
                 for (var i = 0; i < rendszamIndexek.length; i+=3) {
                   var rendszam = rendszamIndexek[i];
                   var kartyaszam = rendszamIndexek[i+1];
+                  var idoszak =$('#idoszak').val();
                   var indexek = JSON.stringify(rendszamIndexek[i+2]);
                   var csv = JSON.stringify(arr);
                   $.post("pdfcreator4.php", {
                     rendszam: rendszam,
                     kartyaszam: kartyaszam,
+                    idoszak:
                     indexek: indexek,
                     csv: arr
                   },
@@ -313,17 +315,6 @@ if (!isset($userName)) {
             });
         }
       });
-    //  ki kell válogatni, hogy melyik autókra kell késziteni elszámolást
-
-        // $.post("pdfcreator4.php", {
-        //   item1: a,
-        //   item2: b,
-        // },
-        // "json").done(function( response ) {
-        //   if (response != "error") {
-        //   }
-        // });
-
     }
   </script>
   <script src="cegfunctions.js" charset="utf-8"></script>
