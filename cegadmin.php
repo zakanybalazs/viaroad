@@ -216,7 +216,7 @@ if (!isset($userName)) {
           var kartyaszam = str[6];
           var kartyaszam = kartyaszam.replace(/\s/g, '');
           var ceg = str[4];
-          var ceg = rendszam.replace(/\s/g, '');
+          var ceg = ceg.replace(/\s/g, '');
           var kilometeroraallas = str[8];
           var kilometeroraallas = kilometeroraallas.replace(/\s/g, '');
           var egysegar = str[27];
@@ -304,7 +304,7 @@ if (!isset($userName)) {
                   $.post("pdfcreator4.php", {
                     rendszam: rendszam,
                     kartyaszam: kartyaszam,
-                    idoszak:
+                    idoszak: idoszak,
                     indexek: indexek,
                     csv: arr
                   },

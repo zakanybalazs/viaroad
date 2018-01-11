@@ -27,7 +27,7 @@ $kartyaszam = $_POST['kartyaszam'];
 // $kartyaszam = "7081678014337919";
 $indexek = json_decode($_POST['indexek']);
 // $indexek = [0,1,2];
-$csv = json_decode($_POST['csv']);
+$csv = $_POST['csv'];
 // $csv = array(
 //   0 => [
 //     'date' => '2017-12-31',
@@ -104,7 +104,7 @@ while ($szemelyAdatok = mysqli_fetch_assoc($szemelySendQ)) {
 $sor1 = iconv('utf-8', 'iso-8859-2',"       Neve: $vezeteknev $keresztnev                          Lakcíme: $lakcim");
 $pdf->Cell(0,8,$sor1,0,1,"L");
 
-$sor2 = iconv('utf-8', 'iso-8859-2',"       Adószáma: $adoszam                          Szül.idő, hely: $szuletesiido, $szuletesihely");
+$sor2 = iconv('utf-8', 'iso-8859-2',"       Adóazonosító: $adoszam                          Szül.idő, hely: $szuletesiido, $szuletesihely");
 $pdf->Cell(0,8,$sor2,0,1,"L");
 
 $sor3 = iconv('utf-8', 'iso-8859-2',"       Beosztása: $beosztas                         Szolg. hely: $szolgalatihely");
@@ -279,7 +279,7 @@ $pdf->SetXY(15, $y);
 $ma = date("Y-m-d",strtotime("now"));
 $dateing = iconv('utf-8', 'iso-8859-2',"Dátum: $ma");
 $pdf->Cell(50,5,"$dateing","B",1,"L");
-// $name = "uploads/elszamolasok/TIG $rendszam $vege.pdf";
- $pdf->Output(); // ha esetleg nem akarjuk egyből letölteni
-//$pdf->Output("F",$name,TRUE); //ennek kell leghátul lennie (autómatikus letöltés)
+$name = "uploads/elszamolasok/TIG $kartyaszam $idoszak.pdf";
+// $pdf->Output("D"); // ha esetleg nem akarjuk egyből letölteni
+$pdf->Output("F",$name,TRUE); //ennek kell leghátul lennie (autómatikus letöltés)
 ?>
