@@ -27,7 +27,14 @@ $kartyaszam = $_POST['kartyaszam'];
 // $kartyaszam = "7081678014337919";
 $indexek = json_decode($_POST['indexek']);
 // $indexek = [0,1,2];
-$csv = $_POST['csv'];
+$csv_all = $_POST['csv'];
+$csv = array();
+
+for ($g=0; $g < sizeof($indexek); $g++) {
+  $index = $indexek[$g];
+  $csv[$g] = $csv_all[$index];
+}
+
 // $csv = array(
 //   0 => [
 //     'date' => '2017-12-31',
