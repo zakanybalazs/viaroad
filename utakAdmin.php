@@ -201,8 +201,8 @@ while ($bAdatok = mysqli_fetch_assoc($bSendQ)) {
       var vege = $( '#vege' ).val();
       var ceg = $( '#ceg' ).val();
       var rendszam = $( '#rendszam' ).val();
-      var pdfhely = "uploads/elszamolasok/TIG " +  rendszam + " " + vege + ".pdf";
-      var kephely = "uploads/elszamolasok/KEP " +  rendszam + " " + vege + ".jpg";
+      var pdfhely = "uploads/elszamolasok/TIG-" +  rendszam + "-" + vege + ".pdf";
+      var kephely = "uploads/elszamolasok/KEP-" +  rendszam + "-" + vege + ".jpg";
       // var kephely = encodeURI(kephely);
       var KepFile = new FormData();
 
@@ -341,6 +341,9 @@ while ($bAdatok = mysqli_fetch_assoc($bSendQ)) {
               $kolcsonT = $utjaim['kolcsonbe'];
               $kepT = $utjaim['kep'];
               $kepNevT = $utjaim['kepnev'];
+              if ($kepNevT == "N/A") {
+                $kepT = "#";
+              }
               $datumTT = date_create($datumT);
               $datumFormat = date_format($datumTT,'Y-m-d H:i');
 
