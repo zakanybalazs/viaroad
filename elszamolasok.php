@@ -36,18 +36,18 @@ $userID = getUserId($userName);
 
     <script type="text/javascript">
     $(document).ready(function() {
-/* Apply fancybox to multiple items */
+        /* Apply fancybox to multiple items */
 
-$("a.iframe").fancybox({
-'openEffect'  : 'none',
-'closeEffect' : 'none',
-'iframe' : {
-    'preload' : false
-},
-'type': 'iframe'
-});
+        $("a.iframe").fancybox({
+        'openEffect'  : 'none',
+        'closeEffect' : 'none',
+        'iframe' : {
+            'preload' : false
+        },
+        'type': 'iframe'
+        });
 
-});
+        });
     </script>
     <script type="text/javascript">
       function pin(selector) {
@@ -208,7 +208,7 @@ while ($bAdatok = mysqli_fetch_assoc($bSendQ)) {
             Pceg : ceg,
         },
         "json").done(function() {
-          // Adatbázisba felvesszük az adatokat, hogy itt tudják elfogadni, letölteni. (felhasználó, eleje, vége, képhelye, pdf helye, aláírója, adminisztrátora)
+                    // Adatbázisba felvesszük az adatokat, hogy itt tudják elfogadni, letölteni. (felhasználó, eleje, vége, képhelye, pdf helye, aláírója, adminisztrátora)
           $.post( "ajax/ajax.ujelszamolas.php", {
               Pfelhasznalo : userName,
               Pkezdo : kezdo,

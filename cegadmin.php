@@ -238,6 +238,34 @@ if (!isset($userName)) {
 </table>
 </div>
 <script type="text/javascript">
+$(document).ready(function() {
+    /* Apply fancybox to multiple items */
+
+    $("a.iframe").fancybox({
+    'openEffect'  : 'none',
+    'closeEffect' : 'none',
+    'iframe' : {
+        'preload' : false
+    },
+    'type': 'iframe'
+    });
+
+    });
+
+    function initIframe() {
+        /* Apply fancybox to multiple items */
+
+        $("a.iframe").fancybox({
+        'openEffect'  : 'none',
+        'closeEffect' : 'none',
+        'iframe' : {
+            'preload' : false
+        },
+        'type': 'iframe'
+        });
+
+        }
+
   $('#idoszak').change(function() {
     $('#setBody').empty();
     var idoszak = $(this).val();
@@ -280,10 +308,11 @@ if (!isset($userName)) {
                 console.log(response);
                 $('#getBody').empty();
                 for (var i = 0; i < response.length; i++) {
-                  var string = "<tr><td>"+response[i].kartyaszam+"</td><td>"+idoszak+"</td><td>"+response[i].szamlazando+"</td><td><a href="+response[i].pdf_hely+" target='_blank' class='btn btn-success'>Megtekint</a></td></tr>";
+                  var string = "<tr><td>"+response[i].kartyaszam+"</td><td>"+idoszak+"</td><td>"+response[i].szamlazando+"</td><td><a class='btn btn-success iframe' href="+response[i].pdf_hely+">Megtekint</a></td></tr>";
                   $('#getBody').append(string);
                 }
               }
+              initIframe();
             });
 
           if (i == x) {
