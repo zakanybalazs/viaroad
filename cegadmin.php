@@ -106,6 +106,79 @@ if (!isset($userName)) {
    ?>
 </tbody>
 </table>
+<h3>Üzemanyag árak</h3>
+<h4>Új üzemanyagár rögzítése</h4>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+  <label>Típus</label>
+    <select class="form-control" id="uz_tipus">
+      <option>Benzin</option>
+      <option>diesel</option>
+    </select>
+</div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+  <label>Érvényesség</label>
+    <input type="date" id="uz_ervenyesseg" class="form-control">
+</div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+  <label>Egységár</label>
+  <input type="number" id="uz_egyseg" class="form-control">
+</div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+  <label style="font-size=200%">Mentés</label>
+  <button class="form-control btn btn-success" onclick="mentes_uz()">💾</button>
+  <script type="text/javascript">
+    function mentes_uz() {
+      var tipus = $('#uz_tipus option:selected').val();
+      var ervenyesseg = $('#uz_ervenyesseg').val();
+      var egyseg = $('#uz_egyseg').val();
+      $.post("ajax/ajax.uz_ment.php", {
+        tipus: tipus,
+        ervenyesseg: ervenyesseg,
+        egyseg: egyseg
+      },
+      "json").done(function( response ) {
+        if (response != "error") {
+        }
+      });
+    }
+  </script>
+</div>
+<table class="table table-responsive table-striped table-hover">
+  <thead>
+    <th>Típus</th>
+    <th>Érvényesség</th>
+    <th>Egységár</th>
+  </thead>
+  <tbody>
+    <?php
+    $q = "SELECT * FROM uzemanyagar";
+    $sq = mysqli_query($viapanServer, $q);
+    while($sqa = mysqli_fetch_assoc($sq)) {
+    $id = $sqa['tipus'];
+      ?>
+        <tr id="tr_<?php echo $id; ?>">
+          <td><?php echo $sqa['tipus'] ?></td>
+          <td><?php echo $sqa['ervenyes'] ?></td>
+          <td><?php echo $sqa['ar'] ?></td>
+          <td><button class="btn btn-danger" onclick="toroles('<?php echo $id; ?>')">Törlés</buton></td>
+        </tr>
+      <?php
+      }
+       ?>
+       <script type="text/javascript">
+         function toroles(id) {
+           $.post("ajax/ajax.delete.php", {
+             id: id,
+           },
+           "json").done(function( response ) {
+             if (response != "error") {
+               $('#tr_' + id).slideUp(800);
+             }
+           });
+         }
+       </script>
+  </tbody>
+</table>
 </div>
 </div>
 </div>
@@ -140,6 +213,7 @@ if (!isset($userName)) {
   <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6"><p></p> </div>
 </div>
 <div class="container">
+  <h3>Kárta tulajdonosok</h3>
 <table class="table table-striped table-hover">
   <thead>
     <th>Név</th>
@@ -147,6 +221,19 @@ if (!isset($userName)) {
     <th>Lezárva</th>
   </thead>
   <tbody id="setBody">
+  </tbody>
+</table>
+</div>
+<div class="container">
+  <h3>Elszámolások az időszakra</h3>
+<table class="table table-striped table-hover">
+  <thead>
+    <th>Kártyaszám</th>
+    <th>Időszak</th>
+    <th>Számlázandó</th>
+    <th>PDF</th>
+  </thead>
+  <tbody id="getBody">
   </tbody>
 </table>
 </div>
@@ -183,6 +270,22 @@ if (!isset($userName)) {
             var string = "<tr><td>"+response[i].nev+"</td><td>"+response[i].rendszam+"</td><td>"+indicator+"</td></tr>";
             tbody.append(string);
           }
+
+            $.post("ajax/ajax.getkartyastig.php", {
+              idoszak: idoszak
+            },
+            "json").done(function( response ) {
+              if (response != "error") {
+                console.log("tigek:");
+                console.log(response);
+                $('#getBody').empty();
+                for (var i = 0; i < response.length; i++) {
+                  var string = "<tr><td>"+response[i].kartyaszam+"</td><td>"+idoszak+"</td><td>"+response[i].szamlazando+"</td><td><a href="+response[i].pdf_hely+" target='_blank' class='btn btn-success'>Megtekint</a></td></tr>";
+                  $('#getBody').append(string);
+                }
+              }
+            });
+
           if (i == x) {
             $('#filefeltoltes').slideDown(1200);
           } else {
@@ -216,7 +319,7 @@ if (!isset($userName)) {
           var kartyaszam = str[6];
           var kartyaszam = kartyaszam.replace(/\s/g, '');
           var ceg = str[4];
-          var ceg = ceg.replace(/\s/g, '');
+          // var ceg = ceg.replace(/\s/g, '');
           var kilometeroraallas = str[8];
           var kilometeroraallas = kilometeroraallas.replace(/\s/g, '');
           var egysegar = str[27];
@@ -309,7 +412,20 @@ if (!isset($userName)) {
                     csv: arr
                   },
                   "json").done(function( response ) {
-
+                    $.post("ajax/ajax.getkartyastig.php", {
+                      idoszak: idoszak
+                    },
+                    "json").done(function( response ) {
+                      if (response != "error") {
+                        console.log("tigek:");
+                        console.log(response);
+                        $('#getBody').empty();
+                        for (var i = 0; i < response.length; i++) {
+                          var string = "<tr><td>"+response[i].kartyaszam+"</td><td>"+idoszak+"</td><td>"+response[i].szamlazando+"</td><td><a href="+response[i].pdf_hely+" target='_blank' class='btn btn-success'>Megtekint</a></td></tr>";
+                          $('#getBody').append(string);
+                        }
+                      }
+                    });
                   });
                 }
             });

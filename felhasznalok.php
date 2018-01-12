@@ -23,7 +23,7 @@ $userSet = mysqli_query($viapanServer, $query);
 
   <form action="ujfelhasznalo.php" method="post">
   <h2>Felhasznalok listaja
-    <button class="btn btn-group-lg btn-success" type="submit">Felhasznalo kezelése</button>
+    <button class="btn btn-group-lg btn-success" type="submit">Felhasznalók kezelése</button>
     <p></p>
   </h2>
 </div>

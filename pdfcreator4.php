@@ -279,7 +279,15 @@ $pdf->SetXY(15, $y);
 $ma = date("Y-m-d",strtotime("now"));
 $dateing = iconv('utf-8', 'iso-8859-2',"Dátum: $ma");
 $pdf->Cell(50,5,"$dateing","B",1,"L");
-$name = "uploads/elszamolasok/TIG $kartyaszam $idoszak.pdf";
+$name = "uploads/elszamolasok/TIG-$kartyaszam-$idoszak.pdf";
+$name_s = "$kartyaszam $idoszak.pdf";
 // $pdf->Output("D"); // ha esetleg nem akarjuk egyből letölteni
+
+$q = "INSERT INTO kartyastig (kartyaszam,idoszak,szamlazando,pdf_nev,pdf_hely) VALUES ('{$kartyaszam}', '{$idoszak}', '{$magan_oszeg}', '{$name_s}', '{$name}')";
+$sq = mysqli_query($viapanServer,$q);
+if ($sq) {
+  # code...
+}
 $pdf->Output("F",$name,TRUE); //ennek kell leghátul lennie (autómatikus letöltés)
+
 ?>

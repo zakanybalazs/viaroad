@@ -521,15 +521,19 @@ $user = $talalt['kolcsonbe'];
 <?php
 function userValidate ($userName) {
   $viapanServer = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");
-  $validQ = "SELECT * FROM felhasznalok WHERE felhasznalo = $userName";
+  $userName = mysqli_real_escape_string($viapanServer,$userName);
+  $validQ = "SELECT * FROM felhasznalok WHERE felhasznalo = '{$userName}'";
   $validate = mysqli_query($viapanServer, $validQ);
+  $count = 0;
   while ($name = mysqli_fetch_assoc($validate)) {
-    if (!empty($name['felhasznalo'])) {
-      return false;
-    } else {
-      return true;
-    }
+    $count += 1;
   }
+  if ($count > 0) {
+    return false;
+  } else {
+    return true;
+  }
+
 }
 
  ?>

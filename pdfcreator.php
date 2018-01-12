@@ -118,7 +118,7 @@ $pdf->Line(130,265,185,265);
 $tizenegyedik = iconv('utf-8','iso-8859-2',"Cégszerű aláírás            ");
 $pdf->Cell(0,4,$tizenegyedik,0,1,"R");
 // itt kell meghatarozni, hogy hova fog bekerulni. Ezt felvisszuk az adatbazisba
-$name = "uploads/cegeselszamolasok/TIG $rendszam $kolcsonID $vege.pdf";
+$name = "uploads/cegeselszamolasok/TIG-$rendszam-$kolcsonID-$vege.pdf";
 //elhelyezzuk a file-t es rogzitjuk az adatbazisban, hogy hova raktuk
 
 $q = "INSERT INTO cegestigek (rendszam, kezd, vege, kolcsonid, osszeg, pdfhely) VALUES ('{$rendszam}','{$kezd}','{$vege}','{$kolcsonID}','{$osszesen}','{$name}')";

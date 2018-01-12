@@ -162,7 +162,7 @@ if (!empty($_GET['siker'])) {
          <td></td>
          <?php
        }
-         if ($szerzodesnev != "NA") {
+         if ($szerzodesnev != "N/A") {
          ?>
          <td><a data-toggle="lightbox" class='btn btn-success' href='<?php echo "$szerzodeshely"; ?>'>Szerődés letöltése</a></td>
          <?php

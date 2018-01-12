@@ -171,8 +171,8 @@ while ($bAdatok = mysqli_fetch_assoc($bSendQ)) {
       var vege = $( '#vege' ).val();
       var ceg = $( '#ceg' ).val();
       var rendszam = $( '#rendszam' ).val();
-      var pdfhely = "uploads/elszamolasok/TIG " +  rendszam + " " + vege + ".pdf";
-      var kephely = "uploads/elszamolasok/KEP " +  rendszam + " " + vege + ".jpg";
+      var pdfhely = "uploads/elszamolasok/TIG-" +  rendszam + "-" + vege + ".pdf";
+      var kephely = "uploads/elszamolasok/KEP-" +  rendszam + "-" + vege + ".jpg";
       // var kephely = encodeURI(kephely);
       var KepFile = new FormData();
 

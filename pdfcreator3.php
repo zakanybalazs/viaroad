@@ -177,7 +177,7 @@ $kocka3 =  iconv('utf-8', 'iso-8859-2',"aláírás, Ph.");
 $pdf->MultiCell(70,6,$kocka3,1,"C");
 
 
-$name = "uploads/elszamolasok/TIG $rendszam $vege.pdf";
+$name = "uploads/elszamolasok/TIG-$rendszam-$vege.pdf";
 // $pdf->Output(); // ha esetleg nem akarjuk egyből letölteni
 $pdf->Output("F",$name,TRUE); //ennek kell leghátul lennie (autómatikus letöltés)
 ?>

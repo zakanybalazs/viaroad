@@ -84,6 +84,9 @@ if (!empty($_POST['user'])) {
     $hashed = jelszoHash($password);
     ujFelhasznalo($userName, $hashed, $auth);
     ?>
+    <script type="text/javascript">
+    window.location.href = "index.php";
+    </script>
     <?php
   } else {
     // itt szólni kell hogy ilyen már van

@@ -92,6 +92,7 @@ $( document ).ready(function() {
         #hidingWell {
           overflow: visible;
           position: absolute;
+          z-index: 1;
         }
       </style>
       <div class="well" id="hidingWell" hidden="hidden">
