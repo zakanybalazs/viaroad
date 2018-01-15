@@ -27,6 +27,7 @@ $kolcsonID = $kod['kolcson'];
 
 $ceg = getCegByRendszam($rendszam);
 $telep = getCegTelepByName($ceg);
+
 $dij = getCegDijByCeg($ceg);
 
 
@@ -41,13 +42,14 @@ $masodik = iconv('utf-8', 'iso-8859-2',"Teljesített Km               Egységár
 $pdf->Text(80,92,$masodik);
 $pdf->MultiCell(0,15,""); // Üres, csak azért kell mert a text float
 
+
 $query = "SELECT * FROM utak WHERE rendszam = '{$rendszam}' AND kolcsonbe = '{$kolcsonID}'";
 $result = mysqli_query($viapanServer,$query);
 $km = 0;
 while ($rows = mysqli_fetch_assoc($result)) {
-if ($rows["datum"] >= $kezd && $rows["datum"] <= $vege) {
-$km = $km + $rows["km"];
-}
+  if ($rows["datum"] >= $kezd && $rows["datum"] <= $vege) {
+    $km = $km + $rows["km"];
+  }
 }
 
 

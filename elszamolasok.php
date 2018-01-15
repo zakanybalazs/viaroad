@@ -14,54 +14,48 @@ $userID = getUserId($userName);
 ?>
   <body>
     <script type="text/javascript">
-    function hidewell() {
-      $( '#hidingWell' ).fadeOut(800);
-      $( '#hidebutton' ).attr('onclick', 'showWell()');
-      $( '#hidebutton' ).text('Új elszámolás készítése')
-    }
-    </script>
-    <script type="text/javascript">
-    function showWell() {
-      $( '#hidingWell' ).fadeIn(800);
-      $( '#hidebutton' ).attr('onclick', 'hidewell()');
-      $( '#hidebutton' ).text('Bezárás')
-    }
-    </script>
-    <script type="text/javascript">
-    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-      event.preventDefault();
-      $(this).ekkoLightbox();
-});
-    </script>
+        function hidewell() {
+          $( '#hidingWell' ).fadeOut(800);
+          $( '#hidebutton' ).attr('onclick', 'showWell()');
+          $( '#hidebutton' ).text('Új elszámolás készítése')
+        }
+        function showWell() {
+          $( '#hidingWell' ).fadeIn(800);
+          $( '#hidebutton' ).attr('onclick', 'hidewell()');
+          $( '#hidebutton' ).text('Bezárás')
+        }
 
-    <script type="text/javascript">
-    $(document).ready(function() {
-        /* Apply fancybox to multiple items */
-
-        $("a.iframe").fancybox({
-        'openEffect'  : 'none',
-        'closeEffect' : 'none',
-        'iframe' : {
-            'preload' : false
-        },
-        'type': 'iframe'
+        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+          event.preventDefault();
+          $(this).ekkoLightbox();
         });
 
-        });
-    </script>
-    <script type="text/javascript">
-      function pin(selector) {
-        var vis = $('#' + selector).css('position');
-        if (vis == 'absolute') {
-        $( '#' + selector ).css({
-            'position' : 'inherit'
-        });
-      } else {
-        $( '#' + selector ).css({
-              'position' : 'absolute'
+        $(document).ready(function() {
+            /* Apply fancybox to multiple items */
+
+            $("a.iframe").fancybox({
+            'openEffect'  : 'none',
+            'closeEffect' : 'none',
+            'iframe' : {
+                'preload' : false
+            },
+            'type': 'iframe'
             });
-      }
-      }
+
+            });
+
+          function pin(selector) {
+            var vis = $('#' + selector).css('position');
+            if (vis == 'absolute') {
+            $( '#' + selector ).css({
+                'position' : 'inherit'
+            });
+          } else {
+            $( '#' + selector ).css({
+                  'position' : 'absolute'
+                });
+          }
+          }
     </script>
     <div class="container">
       <button id="hidebutton" class="btn-success form-control" onclick="showWell()">Új elszámolás készítése</button>
@@ -82,7 +76,7 @@ $userID = getUserId($userName);
 
             <label>Autó rendszáma</label>
             <select id="rendszam" name="rendszam" class="form-control">
-              <option disabled selected style='display:none;' required >pl: NDN-239</option>
+              <option disabled selected style='display:none;' required >pl: VIA123</option>
               <?php
               $tulaj = mysqli_real_escape_string($viapanServer,$userName);
               $renQ = "SELECT * FROM autok WHERE tulaj = '{$tulaj}' AND kategoria = 'normal'";

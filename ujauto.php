@@ -45,7 +45,17 @@ if (!empty($_GET['siker'])) {
               <h2 class="form-control-heading">Új céges autó hozzáadása</h2>
               <input type="string" name="rendszam" class="form-control" placeholder="Rendszám" required autofocus>
               <p></p>
-              <input type="string" name="ceg" class="form-control" placeholder="Külcsönbe adó cég neve" required>
+              <input type="string" list="cegek" name="ceg" class="form-control" placeholder="Kölcsönbe adó cég neve" required>
+                <datalist id="cegek">
+                  <?php
+                  $q = "SELECT * FROM cegek WHERE dij > 0";
+                  $sq = mysqli_query($viapanServer, $q);
+                  while($sqa = mysqli_fetch_assoc($sq)) {
+                    ?>
+                    <option><?php echo $sqa['ceg'] ?></option>
+                  <?php }
+                   ?>
+                </datalist>
               <p></p>
               <input type="string" name="marka" class="form-control" placeholder="Autó márkája" required>
               <p></p>
