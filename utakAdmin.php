@@ -448,7 +448,7 @@ while ($bAdatok = mysqli_fetch_assoc($bSendQ)) {
         exportok nem tudták kezelni a magyar speciális karaktereket, pl őá. XLSX-et ad*/
     window.exportExcel = function exportExcel() {
       alasql('SELECT * INTO XLSX("ViaRoadExport.xlsx",{headers:true}) \
-      FROM HTML("#resultsTable",{headers:true})');
+      FROM HTML("#example",{headers:true})');
 
     } // end of document ready
     </script>
