@@ -75,8 +75,6 @@ $prevKM = $piszkozatResult['kezdokm'];
              });
            }
          }
- </script>
-<script>
   $(document).ready(function() {
       loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVgzq8IW5TgMx7Xcjz2UOVdgSoSd3Flpo");
     })
@@ -88,6 +86,7 @@ if (!isset($userName)) {
   window.location="index.php";
   </script>
   <?php }
+
   // "nincs" vagy "van" ad csak vissza
   $PreLoads = piszkozatKereso($userName);
   if ($PreLoads == "nincs") {
@@ -134,7 +133,11 @@ if (!isset($userName)) {
           $('#honapzaro').show();
         }, 500);
       </script>
-      <?php} }  ?>
+      <?php
+        }
+      }
+
+      ?>
     <body>
 <script type="text/javascript">
           function something() {
