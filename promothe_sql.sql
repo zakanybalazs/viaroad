@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2018. Jan 15. 17:01
+-- Létrehozás ideje: 2018. Jan 16. 10:17
 -- Kiszolgáló verziója: 10.1.21-MariaDB
 -- PHP verzió: 7.1.1
 
@@ -174,8 +174,7 @@ CREATE TABLE `elszamolasok` (
 --
 
 INSERT INTO `elszamolasok` (`id`, `felhasznaloID`, `alairoID`, `irodavezetoID`, `rendszam`, `kezdo`, `vege`, `kephely`, `dokhely`, `statusz`) VALUES
-(34, 26, 4, 4, 'VIA234', '2018-01-01', '2018-01-14', 'uploads/elszamolasok/KEP-VIA234-2018-01-14.jpg', 'uploads/elszamolasok/TIG-VIA234-2018-01-14.pdf', 'done'),
-(35, 4, 4, 4, 'NDN239', '2018-01-01', '2018-01-31', 'uploads/elszamolasok/KEP-NDN239-2018-01-31.jpg', 'uploads/elszamolasok/TIG-NDN239-2018-01-31.pdf', 'sent');
+(34, 26, 4, 4, 'VIA234', '2018-01-01', '2018-01-14', 'uploads/elszamolasok/KEP-VIA234-2018-01-14.jpg', 'uploads/elszamolasok/TIG-VIA234-2018-01-14.pdf', 'done');
 
 -- --------------------------------------------------------
 
@@ -299,8 +298,8 @@ INSERT INTO `kilometer` (`id`, `rendszam`, `kilometer`, `datum`, `felhasznalo`) 
 (36, 'cdcs', NULL, NULL, NULL),
 (37, 'VIA123', 13661, '2018-01-12', 'ZÃ¡kÃ¡ny BalÃ¡zs'),
 (38, 'VIA234', 157, '2018-01-11', 'Viapan PolgÃ¡r'),
-(39, 'NZP780', 30421, '2018-01-09', 'ZÃ¡kÃ¡ny BalÃ¡zs'),
-(40, 'NDN239', 33193, '2018-01-08', 'ZÃ¡kÃ¡ny BalÃ¡zs');
+(39, 'NZP780', 30495, '2018-01-16', 'ZÃ¡kÃ¡ny BalÃ¡zs'),
+(40, 'NDN239', 33487, '2018-01-16', 'ZÃ¡kÃ¡ny BalÃ¡zs');
 
 -- --------------------------------------------------------
 
@@ -345,17 +344,18 @@ CREATE TABLE `szemelyadatok` (
   `szuletesihely` varchar(255) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
   `szolgalatihely` varchar(255) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
   `alairoid` int(10) DEFAULT NULL,
-  `irodavezetoid` int(10) DEFAULT NULL
+  `irodavezetoid` int(10) DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_hungarian_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `szemelyadatok`
 --
 
-INSERT INTO `szemelyadatok` (`felhasznaloid`, `vezeteknev`, `keresztnev`, `adoszam`, `beosztas`, `lakcim`, `szuletesiido`, `szuletesihely`, `szolgalatihely`, `alairoid`, `irodavezetoid`) VALUES
-(4, 'ZÃ¡kÃ¡ny', 'BalÃ¡zs', '095127440', 'FejlesztÅ‘', '7761 KozÃ¡rmisleny Viola u 40/2', '1995-01-09', 'Miskolc', 'PÃ©cs', 4, 4),
-(22, 'Teszt', 'Elek', '123234345', 'TesztelÅ‘', '1223 Teszt, Teszt utca 4', '1989-12-12', 'Teszt', 'Teszt', 4, 4),
-(26, 'Viapan', 'PolgÃ¡r', '095127440', 'TesztelÅ‘ kisinas', '1234 Budapest Nemis u. 19', '1999-01-01', 'KisujjkÃ¶z', 'PÃ©cs', 4, 4);
+INSERT INTO `szemelyadatok` (`felhasznaloid`, `vezeteknev`, `keresztnev`, `adoszam`, `beosztas`, `lakcim`, `szuletesiido`, `szuletesihely`, `szolgalatihely`, `alairoid`, `irodavezetoid`, `email`) VALUES
+(4, 'ZÃ¡kÃ¡ny', 'BalÃ¡zs', '095127440', 'FejlesztÅ‘', '7761 KozÃ¡rmisleny Viola u 40/2', '1995-01-09', 'Miskolc', 'PÃ©cs', 4, 4, 'zakany.balazs@viapangroup.com'),
+(22, 'Teszt', 'Elek', '123234345', 'TesztelÅ‘', '1223 Teszt, Teszt utca 4', '1989-12-12', 'Teszt', 'Teszt', 4, 4, ''),
+(26, 'Viapan', 'PolgÃ¡r', '095127440', 'TesztelÅ‘ kisinas', '1234 Budapest Nemis u. 19', '1999-01-01', 'KisujjkÃ¶z', 'PÃ©cs', 4, 4, '');
 
 -- --------------------------------------------------------
 
@@ -394,7 +394,10 @@ INSERT INTO `utak` (`id`, `felhasznalo`, `datum`, `rendszam`, `honnan`, `ceg`, `
 (143, 'ZÃ¡kÃ¡ny BalÃ¡zs', '2018-01-05 12:15:00.000000', 'NZP780', 'KaposvÃ¡r', 'DakÃ³-p \'96 Kft.', 'PÃ©cs', 'AutÃ³ leadÃ¡sa', 30140, 30213, 73, 'md', 1394, 'Benzin', 'uploads/N/A', 'N/A', NULL),
 (144, 'ZÃ¡kÃ¡ny BalÃ¡zs', '2018-01-05 14:30:00.000000', 'NZP780', 'PÃ©cs', 'DakÃ³-p \'96 Kft.', 'PÃ©cs', 'RPP Kft.', 30213, 30226, 13, 'di', 1394, 'Benzin', 'uploads/N/A', 'N/A', NULL),
 (145, 'ZÃ¡kÃ¡ny BalÃ¡zs', '2018-01-09 10:25:00.000000', 'NZP780', 'Zalaegerszeg', 'DakÃ³-p \'96 Kft.', 'PÃ©cs', 'TesztelÃ©s', 30226, 30421, 195, 'md', 1394, 'Benzin', 'uploads/N/A', 'N/A', NULL),
-(146, 'ZÃ¡kÃ¡ny BalÃ¡zs', '2018-01-08 10:25:00.000000', 'NDN239', 'KaposvÃ¡r', NULL, 'PÃ©cs', 'TesztelÃ©s', 33120, 33193, 73, NULL, 8.6, 'Benzin', 'uploads/N/A', 'N/A', NULL);
+(146, 'ZÃ¡kÃ¡ny BalÃ¡zs', '2018-01-08 10:25:00.000000', 'NDN239', 'KaposvÃ¡r', NULL, 'PÃ©cs', 'TesztelÃ©s', 33120, 33193, 73, NULL, 8.6, 'Benzin', 'uploads/N/A', 'N/A', NULL),
+(147, 'ZÃ¡kÃ¡ny BalÃ¡zs', '2018-01-16 09:14:00.000000', 'NZP780', 'KaposvÃ¡r', 'DAKÃ“-P \'96 Kft.', 'PÃ©cs', 'asdf', 30421, 30495, 74, 'md', 1394, 'Benzin', 'uploads/N/A', 'N/A', NULL),
+(148, 'ZÃ¡kÃ¡ny BalÃ¡zs', '2018-01-16 09:14:00.000000', 'NDN239', 'KaposvÃ¡r', NULL, 'PÃ©cs', 'asdfqwer', 33193, 33263, 70, NULL, 8.6, 'Benzin', 'uploads/N/A', 'N/A', NULL),
+(149, 'ZÃ¡kÃ¡ny BalÃ¡zs', '2018-01-16 09:20:00.000000', 'NDN239', 'Budapest', NULL, 'PÃ©cs', 'Mettinf', 33263, 33487, 224, NULL, 8.6, 'Benzin', 'uploads/N/A', 'N/A', NULL);
 
 -- --------------------------------------------------------
 
@@ -561,7 +564,7 @@ ALTER TABLE `kilometer`
 -- AUTO_INCREMENT a táblához `utak`
 --
 ALTER TABLE `utak`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
 --
 -- AUTO_INCREMENT a táblához `uzemanyagar`
 --

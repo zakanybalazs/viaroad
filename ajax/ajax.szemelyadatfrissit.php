@@ -16,11 +16,12 @@ if ( !$viapanServer ) {
  $szolgalatihely = $_POST['Postszolgalatihely'];
  $alairo = $_POST['Postalairo'];
  $adminisztrator = $_POST['Postadminisztrator'];
+ $email = $_POST['Postemail'];
  $userName = $_POST['PostUserName'];
 $safeUser = mysqli_real_escape_string($viapanServer,$userName);
 $id = getUserId($safeUser);
 $json = array();
-$res = szemelyAdatFrissit($vezeteknev,$keresztnev,$adoszam,$beosztas,$lakcim,$szuletesiido,$szuletesihely,$szolgalatihely,$alairo,$adminisztrator,$id);
+$res = szemelyAdatFrissit($vezeteknev,$keresztnev,$adoszam,$beosztas,$lakcim,$szuletesiido,$szuletesihely,$szolgalatihely,$alairo,$adminisztrator,$id,$email);
   if($res =="ok") {
      $json[]=array(
        "ok"

@@ -28,6 +28,7 @@ while ($adatok = mysqli_fetch_assoc($mq)) {
   $szolgalatihely = $adatok['szolgalatihely'];
   $alairoid = $adatok['alairoid'];
   $irodavezetoidid = $adatok['irodavezetoid'];
+  $email = $adatok['email'];
   $AB = $AB + 1;
 
   $q2 = "SELECT * FROM felhasznalok WHERE id = '{$alairoid}'";
@@ -97,6 +98,12 @@ while ($adatok = mysqli_fetch_assoc($mq)) {
             <input type="text" id="szolgalatihely" value='<?php if ($AB > 0) {echo "$szolgalatihely"; } ?>' class="form-control">
           </div>
           <p></p>
+          <div class="col-lg-3 col-md-4 col-sm-6">
+            <p></p>
+            <label>E-mail cím</label>
+            <input type="email" id="email" value='<?php if ($AB > 0) {echo "$email"; } ?>' class="form-control">
+          </div>
+          <p></p>
           <datalist id="users">
           <?php
           $usersQ = "SELECT * FROM felhasznalok WHERE authority = 'admin' OR authority = 'superuser' OR authority = 'cegadmin' AND felhasznalo != '{$userName}'";
@@ -145,7 +152,8 @@ while ($adatok = mysqli_fetch_assoc($mq)) {
       var szolgalatihely = $('#szolgalatihely').val();
       var alairo = $('#alairo').val();
       var adminisztrator = $('#adminisztrator').val();
-      if (vezeteknev == '' || keresztnev == '' || adoszam == '' || beosztas == '' || lakcim == '' || szuletesiido == '' || szuletesihely == '' || szolgalatihely == '' || alairo == '' || adminisztrator == '') {
+      var email = $('#email').val();
+      if (vezeteknev == '' || keresztnev == '' || adoszam == '' || beosztas == '' || lakcim == '' || szuletesiido == '' || szuletesihely == '' || szolgalatihely == '' || alairo == '' || adminisztrator == '' || email == '') {
         bootbox.alert({
           title: "Hiba",
           message: "Minden mező kitöltése kötelező!",
@@ -162,6 +170,7 @@ while ($adatok = mysqli_fetch_assoc($mq)) {
           Postszolgalatihely : szolgalatihely,
           Postalairo : alairo,
           Postadminisztrator : adminisztrator,
+          Postemail : email,
           PostUserName : '<?php echo "$userName"; ?>'
         },
         "json" ).done(function( response ) {
@@ -200,7 +209,8 @@ while ($adatok = mysqli_fetch_assoc($mq)) {
       var szolgalatihely = $('#szolgalatihely').val();
       var alairo = $('#alairo').val();
       var adminisztrator = $('#adminisztrator').val();
-      if (vezeteknev == '' || keresztnev == '' || adoszam == '' || beosztas == '' || lakcim == '' || szuletesiido == '' || szuletesihely == '' || szolgalatihely == '' || alairo == '' || adminisztrator == '') {
+      var email = $('#email').val();
+      if (vezeteknev == '' || keresztnev == '' || adoszam == '' || beosztas == '' || lakcim == '' || szuletesiido == '' || szuletesihely == '' || szolgalatihely == '' || alairo == '' || adminisztrator == '' || email == '') {
         bootbox.alert({
           title: "Hiba",
           message: "Minden mező kitöltése kötelező!",
@@ -217,6 +227,7 @@ while ($adatok = mysqli_fetch_assoc($mq)) {
           Postszolgalatihely : szolgalatihely,
           Postalairo : alairo,
           Postadminisztrator : adminisztrator,
+          Postemail : email,
           PostUserName : '<?php echo "$userName"; ?>'
         },
         "json" ).done(function( response ) {

@@ -17,11 +17,12 @@ if ( !$viapanServer ) {
  $alairo = $_POST['Postalairo'];
  $adminisztrator = $_POST['Postadminisztrator'];
  $userName = $_POST['PostUserName'];
+ $email = $_POST['Postemail'];
 
 $safeUser = mysqli_real_escape_string($viapanServer,$userName);
 $id = getUserId($safeUser);
 $json = array();
-$res = ujSzemelyAdat($vezeteknev,$keresztnev,$adoszam,$beosztas,$lakcim,$szuletesiido,$szuletesihely,$szolgalatihely,$alairo,$adminisztrator,$id);
+$res = ujSzemelyAdat($vezeteknev,$keresztnev,$adoszam,$beosztas,$lakcim,$szuletesiido,$szuletesihely,$szolgalatihely,$alairo,$adminisztrator,$id,$email);
   if($res =="ok") {
      $json[]=array(
        "ok"

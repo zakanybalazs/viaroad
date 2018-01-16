@@ -403,7 +403,7 @@ if ($sik) {
  }
   ?>
   <?php
-  function ujSzemelyAdat($vezeteknev,$keresztnev,$adoszam,$beosztas,$lakcim,$szuletesiido,$szuletesihely,$szolgalatihely,$alairo,$adminisztrator,$id) {
+  function ujSzemelyAdat($vezeteknev,$keresztnev,$adoszam,$beosztas,$lakcim,$szuletesiido,$szuletesihely,$szolgalatihely,$alairo,$adminisztrator,$id,$email) {
 $viapanServer = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");
 $svezeteknev = mysqli_real_escape_string($viapanServer,$vezeteknev);
 $skeresztnev = mysqli_real_escape_string($viapanServer,$keresztnev);
@@ -439,7 +439,7 @@ if (gettype($alairo) == "integer") {
 
 }
 
-$q = "INSERT INTO szemelyadatok (felhasznaloid,vezeteknev,keresztnev,adoszam,beosztas,lakcim,szuletesiido,szuletesihely,szolgalatihely,alairoid,irodavezetoid) VALUES ('{$id}','{$svezeteknev}','{$skeresztnev}','{$adoszam}','{$sbeosztas}','{$slakcim}','{$szuletesiido}','{$sszuletesihely}','{$sszolgalatihely}','{$alairo}','{$adminisztrator}')";
+$q = "INSERT INTO szemelyadatok (felhasznaloid,vezeteknev,keresztnev,adoszam,beosztas,lakcim,szuletesiido,szuletesihely,szolgalatihely,alairoid,irodavezetoid,email) VALUES ('{$id}','{$svezeteknev}','{$skeresztnev}','{$adoszam}','{$sbeosztas}','{$slakcim}','{$szuletesiido}','{$sszuletesihely}','{$sszolgalatihely}','{$alairo}','{$adminisztrator}','{$email}')";
 $do = mysqli_query($viapanServer, $q);
 if ($do) {
   return "ok";
@@ -449,7 +449,7 @@ if ($do) {
 }
    ?>
    <?php
-   function szemelyAdatFrissit($vezeteknev,$keresztnev,$adoszam,$beosztas,$lakcim,$szuletesiido,$szuletesihely,$szolgalatihely,$alairo,$adminisztrator,$id) {
+   function szemelyAdatFrissit($vezeteknev,$keresztnev,$adoszam,$beosztas,$lakcim,$szuletesiido,$szuletesihely,$szolgalatihely,$alairo,$adminisztrator,$id,$email) {
  $viapanServer = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");
  $svezeteknev = mysqli_real_escape_string($viapanServer,$vezeteknev);
  $skeresztnev = mysqli_real_escape_string($viapanServer,$keresztnev);
@@ -487,7 +487,7 @@ if (gettype($alairo) == "integer") {
 
  //
  $q = "UPDATE szemelyadatok SET vezeteknev = '{$svezeteknev}', keresztnev = '{$skeresztnev}', adoszam = '{$adoszam}', beosztas = '{$sbeosztas}',
- lakcim = '{$slakcim}', szuletesiido = '{$szuletesiido}', szuletesihely = '{$sszuletesihely}', szolgalatihely = '{$sszolgalatihely}', alairoid = '{$alairo}', irodavezetoid = '{$adminisztrator}' WHERE felhasznaloid = '{$id}'";
+ lakcim = '{$slakcim}', szuletesiido = '{$szuletesiido}', szuletesihely = '{$sszuletesihely}', szolgalatihely = '{$sszolgalatihely}', alairoid = '{$alairo}', irodavezetoid = '{$adminisztrator}', email = '{$email}' WHERE felhasznaloid = '{$id}'";
  $do = mysqli_query($viapanServer, $q);
  if ($do) {
    return "ok";
