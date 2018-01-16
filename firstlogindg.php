@@ -3,17 +3,7 @@ session_start();
 //$viapanServer = mysqli_connect("localhost","root","ASDW1298","viapan");
 include "functions.php";
 include "css/loginheader.php";
-if (!empty($_GET['siker'])) {
-  if ($_GET['siker']==1) {
-    ?>
-    <body>
-      <div class="container alert alert-success alert-dismissable">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Sikeresen rögzítve!</strong>
-      </div>
-      <?php
-    }
-  }
+
   ?>
   <div>
     <p></p>

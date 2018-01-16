@@ -11,30 +11,8 @@ if (!isset($userName)) {
   </script>
 <?php } ?>
 
-<?php
-if (!empty($_GET['siker'])) {
-  if ($_GET['siker']==1) {
 
- ?>
 
-  <body>
-    <div class="container alert alert-success alert-dismissable">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <strong>Sikeresen rögzítve!</strong>
-    </div>
-<?php
-} else {
-  if ($_GET['siker']==2) {
-    ?>
-    <div class="container alert alert-success alert-dismissable">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <strong>Sikeresen törölve!</strong>
-    </div>
-    <?php
-  }
-}
-}
- ?>
   <body>
 
     <div class="container jumbotron">

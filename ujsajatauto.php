@@ -9,35 +9,7 @@ if (!isset($userName)) {
   <script type="text/javascript">
     window.location="index.php";
   </script>
-<?php }
-if (!empty($_GET['siker'])) {
-  if ($_GET['siker']==1) {
-
- ?>
-  <body>
-    <script type="text/javascript">
-    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-      event.preventDefault();
-      $(this).ekkoLightbox();
-});
-    </script>
-    <div class="container alert alert-success alert-dismissable">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <strong>Sikeresen rögzítve!</strong>
-    </div>
-<?php
-} else {
-  if ($_GET['siker']==2) {
-    ?>
-    <div class="container alert alert-success alert-dismissable">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <strong>Sikeresen törölve!</strong>
-    </div>
-  <?php
-  }
-}
-}
-?>
+<?php } ?>
   <body>
 
     <div class="container jumbotron">

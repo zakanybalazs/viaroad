@@ -134,24 +134,7 @@ if (!isset($userName)) {
           $('#honapzaro').show();
         }, 500);
       </script>
-      <?php}
-  }
-
-    if (!empty($_GET['siker'])) {
-      if ($_GET['siker']==1) {
-        ?>
-        <body onload="initialize()">
-          <?php
-        } else {
-          ?>
-          <div class="container alert alert-danger alert-dismissable">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>Sikertelen rögzítés</strong>
-          </div>
-          <?php
-        }
-      }
-      ?>
+      <?php} }  ?>
     <body>
 <script type="text/javascript">
           function something() {

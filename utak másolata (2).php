@@ -12,24 +12,7 @@ if (!isset($userName)) {
   <?php }
   // "nincs" vagy "van" ad csak vissza
   $PreLoads = piszkozatKereso($userName);
-  if (!empty($_GET['siker'])) {
-    if ($_GET['siker']==1) {
-      ?>
-      <body>
-        <div class="container alert alert-success alert-dismissable">
-          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <strong>Sikeresen rögzítve!</strong>
-        </div>
-        <?php
-      }else {
-        ?>
-        <div class="container alert alert-danger alert-dismissable">
-          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <strong>Sikertelen rögzítés</strong>
-        </div>
-        <?php
-      }
-    }
+
     if (!empty($_GET['delete'])) {
       $torlesID = $_GET['delete'];
       $rendszamMax = $_GET['rendszam'];
