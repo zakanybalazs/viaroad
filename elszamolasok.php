@@ -319,6 +319,11 @@ $userID = getUserId($userName);
           }
         },
         callback: function (result) {
+          $.post( "ajax/ajax.email.php", {
+            elszamolas_id : id,
+            action : "torles"
+          },"json");
+          setTimeout(function(){
           $.post( "ajax/ajax.elszamolastorles.php", {
             Pid : id
           },
@@ -331,10 +336,6 @@ $userID = getUserId($userName);
                   $( '#tr' + id ).fadeOut(1200);
                 }
               }); // sikeres torles
-              $.post( "ajax/ajax.email.php", {
-                elszamolas_id : id,
-                action : "torles"
-              },"json");
             } else {
               bootbox.alert({
                 title: "Sikertelen törlés",
@@ -342,6 +343,7 @@ $userID = getUserId($userName);
               }); //sikertelen torles
             }
           });
+        }, 1000);
         }
       });
     }
