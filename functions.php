@@ -109,7 +109,7 @@ function felhasznaloTorol($userName) {
 function editUser($userId,$userName,$userAuth){
   $viapanServer = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");
   $safeUserName = mysqli_real_escape_string($viapanServer, $userName);
-  $ide = "UPDATE felhasznalok SET authority='$userAuth' WHERE id='$userId'";
+  $ide = "UPDATE felhasznalok SET authority='{$userAuth}' WHERE id='$userId'";
   $siker = mysqli_query($viapanServer, $ide);
 ?>
 <script type="text/javascript">

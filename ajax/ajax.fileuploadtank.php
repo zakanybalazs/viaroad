@@ -9,7 +9,8 @@ while ($piszkozatResult = mysqli_fetch_assoc($piszkozatBetoltes)) {
   $datumPre = $piszkozatResult['datum'];
 }
 $inputfilename = $_FILES['kep']['name'];
-$kepNev = $datumPre . $rendszamPre.'.jpg';
+$ext = pathinfo($inputfilename, PATHINFO_EXTENSION);
+$kepNev = $datumPre . $rendszamPre.$ext;
 $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
                "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
                "â€”", "â€“", ",", "<", ">", "/", "?");

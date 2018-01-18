@@ -18,30 +18,34 @@ if (!isset($userName)) {
       <div class="col-lg-3 col-md-3 col-sm-2">
       </div>
       <div class="col-lg-6 col-md-6 col-sm-7 col-xs-12" >
-            <form action="felhasznaloszerkeszt.php" method="post">
               <h2 class="form-signin-heading"><?php echo $felhasznalo ?> Szerkesztése</h2>
       <p></p>
               <div class="checkbox">
-              <select class="select form-control" name="auth" required>
+              <select class="select form-control" id="auth" required>
                 <option value="admin">admin</option>
                 <option value="user">felhasznalo</option>
               </select>
               </div>
-              <button class="btn btn-success btn-block" type="submit">Mentés</button>
-            </form>
+              <button class="btn btn-success btn-block" onclick="szerk()">Mentés</button>
+
             <h1></h1>
       </div>
 </div>
-<?php
-if (!empty($_POST['user'])) {
-$userName = $_POST['user'];
-$userAuth = $_POST['auth'];
-$safeUser = mysqli_real_escape_string($viapanServer, $userName);
-$userId = getUserId($safeUser);
-//echo "$userName, $userAuth, $userId";
-editUser($userId,$userName,$userAuth);
+<script type="text/javascript">
+  function szerk() {
+    var auth = $('#auth option:selected').val();
+    var felhasznalo_nev = '<?php echo $felhasznalo ?>';
+    $.post("ajax/ajax.felhasznalo_szerk.php", {
+      felhasznalo_nev: felhasznalo_nev,
+      auth: auth,
+    },
+    "json").done(function( response ) {
+      if (response != "error") {
+        window.location="ujfelhasznalo.php";
+      }
+    });
+  }
+</script>
 
-}
- ?>
   </body>
 </html>
