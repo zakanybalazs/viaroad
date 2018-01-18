@@ -236,8 +236,8 @@ if (!isset($userName)) {
                 data: KepFile,
                 url: "ajax/ajax.fileupload.php",
                 dataType: 'json',
-                }); //$.ajax file handling
-              // itt kell a filet a helyere rakni
+              }).done(function(res) {
+                console.log(res);
               $( '#dolgozunk' ).attr('hidden', 'hidden');
               $( '#mehet' ).removeAttr('hidden');
               bootbox.alert({
@@ -250,6 +250,7 @@ if (!isset($userName)) {
                     window.location.href = "switch.php";
                   },
               }); //bootbox siker
+            });
 
             } else { // response ok
               bootbox.alert({
@@ -344,7 +345,7 @@ if (!isset($userName)) {
       var fogyasztasPre = <?php echo "$fogyasztasPre"; ?>;
       var uzemanyagPre = '<?php echo "$uzemanyagPre"; ?>';
       <?php $kepNev = $datumPre . $rendszamPre . '.jpg'; ?>
-      <?php $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=",
+      <?php $strip = array(" ","~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=",
        "+","[", "{", "]","}", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;","&#8220;", "&#8221;",
         "&#8211;", "&#8212;","â€”", "â€“", ",", "<", ">", "/", "?"); ?>
       <?php $clean = trim(str_replace($strip, "", strip_tags($kepNev))); ?>;
@@ -389,8 +390,8 @@ if (!isset($userName)) {
             data: KepFile,
             url: "ajax/ajax.fileuploadtank.php",
             dataType: 'json',
-            }); //$.ajax file handling
-          // itt kell a filet a helyere rakni
+          }).done(function() {
+
           $( '#dolgozunk' ).attr('hidden', 'hidden');
           $( '#mehet' ).removeAttr('hidden');
           bootbox.alert({
@@ -403,6 +404,7 @@ if (!isset($userName)) {
                 window.location.href = "switch.php";
               },
           }); //bootbox siker
+        });
 
         } else {
           bootbox.alert({

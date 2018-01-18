@@ -10,7 +10,7 @@ while ($piszkozatResult = mysqli_fetch_assoc($piszkozatBetoltes)) {
   $rendszamPre = $piszkozatResult['rendszam'];
   $GetID = $piszkozatResult['id'];
   if ($GetID > $idMax) {
-    $$idMax = $GetID;
+    $idMax = $GetID;
     $rendszam = $rendszamPre;
   }
 }
@@ -21,6 +21,7 @@ $hely = '../uploads/autok/forgalmi/' . $kepNev;
  $json  = array($hely);
  // move_uploaded_file($_FILES['kep']['tmp_name'], $hely);
  rename($_FILES['kep1']['tmp_name'],$hely);
-
+ header("Content-Type: text/json");
+ echo json_encode("file upload ok");
 $viapanServer->close();
 ?>

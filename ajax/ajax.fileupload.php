@@ -21,5 +21,7 @@ $hely = '../uploads/' . $clean;
  rename($_FILES['kep']['tmp_name'],$hely);
  $del = "DELETE FROM piszkozat WHERE felhasznalo = '{$userName}'";
  $delsiker = mysqli_query($viapanServer,$del);
+ header("Content-Type: text/json");
+ echo json_encode("file upload ok");
 $viapanServer->close();
 ?>
