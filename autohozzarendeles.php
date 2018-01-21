@@ -19,6 +19,7 @@ if (!isset($userName)) {
      ?>
     <div class="container jumbotron">
       <div class="col-lg-3 col-md-3 col-sm-2">
+        <a class="btn btn-success" href="ujfelhasznalo.php"><i class="fa fa-arrow-left" aria-hidden="true"></i> Vissza</a>
       </div>
       <div class="col-lg-6 col-md-6 col-sm-7 col-xs-12" >
             <form action="autohozzarendeles.php?szerkeszt=<?php echo $felhasznalo?>" method="post">
