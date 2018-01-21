@@ -238,19 +238,32 @@ if (!isset($userName)) {
                 dataType: 'json',
               }).done(function(res) {
                 console.log(res);
-              $( '#dolgozunk' ).attr('hidden', 'hidden');
-              $( '#mehet' ).removeAttr('hidden');
-              bootbox.alert({
-                  title: "Siker!",
-                  size: "small",
-                  message: "Az adatokat sikeresen rögzítettük!",
-                  animate: true,
-                  backdrop: true,
-                  callback: function() {
-                    window.location.href = "switch.php";
-                  },
-              }); //bootbox siker
-            });
+            }).fail(function(res) {
+              console.log("kép feltöltés nem sikerült:");
+              if (res.status == 200) {
+                $( '#dolgozunk' ).attr('hidden', 'hidden');
+                $( '#mehet' ).removeAttr('hidden');
+                bootbox.alert({
+                    title: "Siker!",
+                    size: "small",
+                    message: "Az adatokat sikeresen rögzítettük!",
+                    animate: true,
+                    backdrop: true,
+                    callback: function() {
+                      window.location.href = "switch.php";
+                    },
+                }); //bootbox siker
+              } else {
+                console.log(res);
+                bootbox.alert({
+                    title: "Hiba",
+                    size: "small",
+                    message: "A kép feltöltése nem sikerült! Az utat rögzítettük",
+                    animate: true,
+                    backdrop: true,
+                      }); // bootbox hiba
+              }
+            })
 
             } else { // response ok
               bootbox.alert({
