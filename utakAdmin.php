@@ -11,16 +11,17 @@ if (!isset($userName)) {
   <?php } ?>
   <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-2.2.4/dt-1.10.15/datatables.css"/> -->
   <link rel="stylesheet" type="text/css" href="css/responsive.dataTables.css"/>
-  <script type="text/javascript" src="datatables.js"></script>
-  <!-- <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script> -->
-  <script type="text/javascript" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
 
   <script type="text/javascript">
-  $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+  $(document).on('click', "[data-toggle='lightbox']", function(event) {
+    jQuery.noConflict();
     event.preventDefault();
     $(this).ekkoLightbox();
 });
   </script>
+  <script type="text/javascript" src="datatables.js"></script>
+  <!-- <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script> -->
+  <script type="text/javascript" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
 
 
 
@@ -364,7 +365,7 @@ while ($bAdatok = mysqli_fetch_assoc($bSendQ)) {
               echo "<td id='e$utID'>$honnanT</td>";
               echo "<td id='f$utID'>$hovaT</td>";
               echo "<td id='g$utID'>$kmT</td>";
-              echo "<td id='h$utID'><p><a data-toggle='lightox' href='$kepT'>$kepNevT</a></p></td>";
+              echo "<td id='h$utID'><p><a data-toggle='lightbox' href='$kepT'>$kepNevT</a></p></td>";
               echo "<td id='i$utID'><button class='btn btn-success' onclick='torles($utID)'>Törlés</button></td></tr>";
             }?>
           </tbody>

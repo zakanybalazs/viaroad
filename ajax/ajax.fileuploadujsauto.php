@@ -16,6 +16,7 @@ while ($piszkozatResult = mysqli_fetch_assoc($piszkozatBetoltes)) {
 }
 $inputfilename = $_FILES['kep1']['name'];
 $ext = pathinfo($inputfilename, PATHINFO_EXTENSION);
+$ext = strtolower($ext);
 $kepNev = $rendszam.'forgalmi.'.$ext;
 $hely = '../uploads/autok/forgalmi/' . $kepNev;
  $json  = array($hely);
