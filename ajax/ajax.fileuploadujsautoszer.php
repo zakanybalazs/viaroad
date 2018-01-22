@@ -16,6 +16,7 @@ while ($piszkozatResult = mysqli_fetch_assoc($piszkozatBetoltes)) {
 }
 $inputfilename = $_FILES['kep2']['name'];
 $ext = pathinfo($inputfilename, PATHINFO_EXTENSION);
+$ext = strtolower($ext);
 $kepNev = $rendszam.'szerzodes.'.$ext;
 $hely = '../uploads/autok/kolcsonadasi/' . $kepNev;
  $json  = array();
