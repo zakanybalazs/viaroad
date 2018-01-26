@@ -75,14 +75,12 @@ return null;
 }
 function getUserId($safeUser){
 $viapanServer = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");
-$query = "SELECT * FROM felhasznalok WHERE felhasznalo = '$safeUser' LIMIT 1";
+$query = "SELECT * FROM felhasznalok WHERE felhasznalo = '{$safeUser}'";
 $userSet = mysqli_query($viapanServer, $query);
-if ($admin = mysqli_fetch_assoc($userSet)) {
-$id = $admin['id'];
-return $id;
-} else {
-  return null;
-}
+  while ($a = mysqli_fetch_assoc($userSet)) {
+    $id = $a['id'];
+  }
+  return $id;
 }
 function felhasznalok(){
 $viapanServer = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");

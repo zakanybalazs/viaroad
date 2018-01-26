@@ -129,9 +129,7 @@ $userID = getUserId($userName);
         <div class="col-lg-3 col-md-4 col-sm-6">
           <p></p>
           <label>Cég</label>
-          <input type="text" id="ceg" name="ceg" list="cegList" class="form-control" autocomplete="off" placeholder="pl: Meló-Diák Dél Iskolaszövetkezet">
-          <p></p>
-          <datalist id="cegList">
+          <select class="form-control" id="ceg" name="ceg">
             <?php
             $cegQ = "SELECT * FROM cegek";
             $cegSendQ = mysqli_query($viapanServer,$cegQ);
@@ -139,7 +137,8 @@ $userID = getUserId($userName);
               $cegName = $cegAdat['ceg'];?>
               <option><?php echo "$cegName"; ?></option>
             <?php  } ?>
-          </datalist>
+          </select>
+          <p></p>
           <label>Kép a kilométeróra állásról</label>
           <input type="hidden" name="size" value="2097152">
           <input type="file" name="kep" id="file-1" class="inputfile inputfile-2" data-multiple-caption="{count} files selected" multiple required />
@@ -161,47 +160,54 @@ $userID = getUserId($userName);
       var userName = '<?php echo "$safeuser"; ?>';
       var kezdo = $( '#kezdo' ).val();
       var vege = $( '#vege' ).val();
-      var ceg = $( '#ceg' ).val();
+      var ceg = $( '#ceg option:selected' ).val();
       var rendszam = $( '#rendszam' ).val();
       var pdfhely = "uploads/elszamolasok/TIG-" +  rendszam + "-" + vege + ".pdf";
       var kephely = "uploads/elszamolasok/KEP-" +  rendszam + "-" + vege + ".jpg";
-      // var kephely = encodeURI(kephely);
       var KepFile = new FormData();
-
       if (kezdo == '' || vege == '' || ceg == '' || rendszam == '') {
+          bootbox.alert({
+            title: "Hiba",
+            message: "Nincs minden mező kitöltve!"
+          }); // nincs kép csatolva
+          return;
+        }
+      if (alairoid == '' || irodavezetoid == '') {
         bootbox.alert({
           title: "Hiba",
-          message: "Nincs minden mező kitöltve!"
+          message: "Nincs aláíró vagy adminisztrátor megjelelölve. Ezt az adataim menüpont alatt tudod pótolni."
+        });
+        return;
+      }
+      if ($('#file-1').val() == '') {
+        bootbox.alert({
+          title: "Hiba",
+          message: "A kép feltöltése kötelező!"
         }); // nincs kép csatolva
-      } else {
-        if (alairoid == '' || irodavezetoid == '') {
-          bootbox.alert({
-            title: "Hiba",
-            message: "Nincs aláíró vagy adminisztrátor megjelelölve. Ezt az adataim menüpont alatt tudod pótolni."
-          }); // nincs kép csatolva
-        }
+        return;
+      }
+      // ha ide eljutott, akkor minden adat ki van töltve és képet is töltött fel.
 
-
-        if ($('#file-1').val() == '') {
-          bootbox.alert({
-            title: "Hiba",
-            message: "A kép feltöltése kötelező!"
-          }); // nincs kép csatolva
-        } else {
-          // ha ide eljutott, akkor minden adat ki van töltve és képet is töltött fel.
+      $.post( "ajax/ajax.magan_ut_api.php", {
+        rendszam : rendszam,
+        tulaj    : userName,
+        kezdo    : kezdo,
+        vege     : vege,
+        ceg      : ceg,
+      },
+      "json").done(function(r) {
+        console.log(r);
           KepFile.append('kep', $('#file-1').prop('files')[0]);
           KepFile.append('nev', "../" + kephely);
 
-          // PDF készítés és tárolás (rendszám, eleje, vége, cég)
-          $.post( "pdfcreator3.php", {
-            Prendszam : rendszam,
-            Pkezdo : kezdo,
-            Pvege : vege,
-            Pceg : ceg,
+          // PDF készítés és tárolás (nodejs rest api)
+          $.post( "https://127.0.0.1:3000/tig_magan", {
+            r
           },
-          "json").done(function() {
-            // Adatbázisba felvesszük az adatokat, hogy itt tudják elfogadni, letölteni. (felhasználó, eleje, vége, képhelye, pdf helye, aláírója, adminisztrátora)
-            $.post( "ajax/ajax.ujelszamolas.php", {
+          "json").done(function(res) {
+            console.log("PDF making: ");
+            console.log(res);
+            $.post( "ajax/ajax.ujelszamolas.php", {// Adatbázisba felvesszük az adatokat, hogy itt tudják elfogadni, letölteni.
               Pfelhasznalo : userName,
               Pkezdo : kezdo,
               Pvege : vege,
@@ -211,41 +217,62 @@ $userID = getUserId($userName);
               Palairoid : alairoid,
               Padminid : irodavezetoid,
             },
-            "json").done(function( response ) {
-              if ( response == "ok" ) {
-                // if ok
-                // képet feltöltjük a szerverre, a megfelelő helyre.
-                $.ajax({
-                  type: 'POST',
-                  processData: false,
-                  contentType: false,
-                  cache: false,
-                  data: KepFile,
-                  url: "ajax/ajax.elszamolfileupload.php",
-                  dataType: 'json',
-                }) //$.ajax file handling
-
-                bootbox.alert({
-                  title: "Siker!",
-                  message: "Sikeresen rögzítettük az elszámolást",
-                  callback: function() {
-                    location.reload();
-                  }
-                });
-              } else {
-                // if not ok
-                bootbox.alert({
-                  title: "Hiba",
-                  message: "Hiba történt az adatbázisba való feltöltésben!"
-                });
-              }
+                "json").done(function( response ) {
+                if ( response == "ok" ) {
+                  $.ajax({ // képet feltöltjük a szerverre, a megfelelő helyre.
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    data: KepFile,
+                    url: "ajax/ajax.elszamolfileupload.php",
+                    dataType: 'json',
+                  }).done((response) => {
+                    bootbox.alert({
+                      title: "Siker!",
+                      message: "Sikeresen rögzítettük az elszámolást",
+                      callback: function() {
+                        location.reload();
+                      }
+                    });
+                  }).fail((error) => {
+                    bootbox.alert({
+                      title: "Hiba",
+                      message: "Hiba történt a fájl feltöltésekor!"
+                    });
+                  })
+                } else {
+                  bootbox.alert({
+                    title: "Hiba",
+                    message: "Hiba történt az adatbázisba való feltöltésben!"
+                  });
+                  return;
+              } // adatbázisba feltöltés sikertelen
+            }).fail((e) => { // adatbázisba feltöltés sikertelen
+              bootbox.alert({
+                title: "Hiba",
+                message: "Hiba történt az adatbázisba való feltöltésben!"
+              });
+              console.log(e);
+              return;
             });
-
+          }).fail((e) => { // pdf elkészítése sikertelen
+            bootbox.alert({
+              title: "Hiba",
+              message: "Hiba történt az pdf készítés közben!"
+            });
+            console.log(e);
+            return;
           });
-
-        } // van kép csatolva
-      } // inputok ki vannak töltve
-    } // elszamol function vége
+        }).fail((e) => { // nem sikerült megkapni az adatokat az adatbázisból
+          bootbox.alert({
+            title: "Hiba",
+            message: "Hiba történt az adatok betöltése közben!"
+          });
+          console.log(e);
+          return;
+        });
+    }
   </script>
   <div class="container">
     <div class="well well-sm" onclick="hideopen('sajat')">

@@ -1,0 +1,43 @@
+{
+  "name": "nodeground",
+  "version": "1.0.0",
+  "description": "playground for nodejs learning",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec 'npm test'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zakanybalazs/nodeground.git"
+  },
+  "author": "zkny",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zakanybalazs/nodeground/issues"
+  },
+  "homepage": "https://github.com/zakanybalazs/nodeground#readme",
+  "dependencies": {
+    "ajax-request": "^1.2.3",
+    "async-await": "^0.1.40",
+    "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "express-vue": "^5.0.0-alpha3",
+    "hbs": "^4.0.1",
+    "lodash": "^4.17.4",
+    "mongoose": "^5.0.1",
+    "mysql": "^2.15.0",
+    "nodemon": "^1.14.11",
+    "pdfmake": "^0.1.35",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "vue": "^2.5.13"
+  },
+  "devDependencies": {
+    "expect": "^22.1.0",
+    "mocha": "^5.0.0",
+    "supertest": "^3.0.0"
+  }
+}
