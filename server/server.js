@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const https = require('https');
+const http = require('http');
 const cors = require('cors');
 //internal imports
 const port = process.env.PORT || 3000;

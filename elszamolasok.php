@@ -201,10 +201,7 @@ $userID = getUserId($userName);
           KepFile.append('nev', "../" + kephely);
 
           // PDF készítés és tárolás (nodejs rest api)
-          $.post( "https://127.0.0.1:3000/tig_magan", {
-            r
-          },
-          "json").done(function(res) {
+          $.post( "http://localhost:3000/tig_magan", { r }, "json").done(function(res) {
             console.log("PDF making: ");
             console.log(res);
             $.post( "ajax/ajax.ujelszamolas.php", {// Adatbázisba felvesszük az adatokat, hogy itt tudják elfogadni, letölteni.

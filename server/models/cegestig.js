@@ -4,6 +4,7 @@ const fs = require('fs');
 const Fonts = require("../node_modules/pdfmake/build/vfs_fonts.js");
 
 var cegesTIG = function({text}) {
+  for (var i = 0; i < text.length; i++) {
 var fonts = {
       Roboto: {
           normal: 'fonts/Roboto-Regular.ttf',
@@ -17,183 +18,157 @@ var printer = new pdfPrinter(fonts);
 var t = JSON.stringify({text});
 var t = JSON.parse(t);
 var t = (t.text);
-console.log(t.auto_rendszam);
-/* TODO : ki kell találni, hogyan lehetne választ küldeni a requestre */
 
-function kikuldott(t) {
+function elso_header() {
   var esc = [];
-  esc.push([{text: 'A kiküldött ', alignment: 'center',colSpan:2, lineHeight : 2, fontSize: 16},{}]);
-  esc.push([{text: 'Neve: '+ t.tulaj , fontSize: 9},{text: 'Lakcíme: ' + t.tulaj_lakcim, fontSize: 9}]);
-  esc.push([{text: 'Adószáma: ' + t.tulaj_adoszam, fontSize: 9},{text: 'Szül.idő, hely: ' + t.tulaj_szul_ido + ", " +t.tulaj_szul_hely, fontSize: 9}]);
-  esc.push([{text: 'Beosztása: '+ t.tulaj_beosztas , fontSize: 9},{text: 'Szolg. hely: ' + t.tulaj_szolg_hely, fontSize: 9}]);
-  esc.push([{text: 'F.Rendszám: ' + t.auto_rendszam, fontSize: 9},{text: 'Márka, típus: ' + t.auto_marka + ", " +t.auto_tipus, fontSize: 9}]);
-  esc.push([{text: 'Üzemanyag ár: '+ t.uzemanyag_ar + " Ft/l", fontSize: 9},{text: 'Norma: ' + t.auto_fogyasztas + "l/100Km", fontSize: 9}]);
-  esc.push([{text: 'Löktérfogat: '+ t.auto_terfogat + " cm3", fontSize: 9},{text: 'Üzemanyag: ' + t.auto_uzemanyag, fontSize: 9}]);
-  esc.push([{text: ' ', fontSize: 9},{text: ' ', fontSize: 9}]);
-
+  esc.push([{},{text: 'Teljesített Km',alignment: "center"},{text: 'Egységár', alignment:"left"}]);
   return esc;
 }
-function utak(t) {
+function teljesites(t) {
   var esc = [];
-  esc.push([{text: 'Kiküldetési utasítás', alignment: 'center',colSpan:7,  fontSize: 16},{},{},{},{},{},{}]);
-  esc.push([{text: 'VID'},{text: 'Dátum'},{text: 'Indulási hely'},{text: 'Érkezési hely'},{text: 'Záró km'},{text: 'Utazás célja / parter'},{text: 'Megtett km'}]);
-for (var i = 0; i < t.utak.length; i++) {
-  esc.push([
-    {text: t.utak[i].ut_id, fontSize: 9},
-    {text: t.utak[i].ut_datum, fontSize: 9},
-    {text: t.utak[i].ut_honnan, fontSize: 9},
-    {text: t.utak[i].ut_hova, fontSize: 9},
-    {text: t.utak[i].ut_zaro_km, fontSize: 9},
-    {text: t.utak[i].ut_cel, fontSize: 9},
-    {text: t.utak[i].ut_km, fontSize: 9},
-  ]);
+  esc.push([{text: `${t[i].auto_rendszam} Rendszámú bérelt jármű`},{text: `${t[i].teljesitett_km} Km`},{text: ' * '},{text: `${t[i].egysegar} Ft/Km`},{text: '='},{text: `${t[i].osszeg} Ft`}]);
+  return esc;
 }
-    return esc;
-}
-
-var osszegzes = (t) => {
+function netto(t) {
   var esc = [];
-  esc.push([{
-    text: t.uzemanyag_ar + " Ft / liter x " + t.auto_terfogat + " liter / 100 km x " + t.ossz_km + " km = "}
-    ,{
-    text: t.ossz_koltseg + " Ft", alignment: "right"
-  }]);
-  esc.push([{text: t.amortizacio + ".- Ft / km x " + t.ossz_km + " km = "}, {text: t.ossz_amortizacio + " Ft", alignment: "right"}]);
+  esc.push([{text: "Nettó összesen:"},{},{text: `${t[i].osszeg} Ft`}]);
+  return esc;
+}
+function afa(t) {
+  var esc = [];
+  esc.push([{text: "ÁFA 27%"},{},{text: `${t[i].afa} Ft`, alignment: "left"}]);
+  return esc;
+}
+function global_osszeg(t) {
+  var esc = [];
+  esc.push([{text: "Teljesítés bruttó értéke:"},{},{text: `${t[i].global_osszeg} Ft`}]);
   return esc;
 }
 
-var ossz_km = `Összesen megtett km: ${t.ossz_km}`;
-var osszesen_megtett = `Összesen:     ${t.global_osszeg} Ft`;
-var alairas = `${t.tulaj} aláírása`;
+
+var col1 = 200;
+var col2 = 150;
+var col3 = 150;
+
+var fejlec = `Alulírottak hivatalosan igazoljuk, hogy a(z) ${t[i].kolcsonbe_ado} ${t[i].kolcsonbe_ado_telep} a ${t[i].kolcsonbe_vevo} ${t[i].kolcsonbe_vevo_telep} számára a következő teljesítést végezte ${t[i].idoszak_kezdet} - ${t[i].idoszak_vege} időszakban:`;
+var azaz = `${t[i].osszeg} HUF azaz ${t[i].osszeg_azaz} forint`;
+var footer = `A közöttünk létrejött szerződés alapján a(z) ${t[i].kolcsonbe_ado} ${t[i].kolcsonbe_ado_telep} által végzett szolgáltatás határozott időre szóló elszámolásban történik, ezért a 2007. évi CXXVII. számú Áfa törvény 57-58 § alapján a(z)  ${t[i].kolcsonbe_ado} teljesítéséről kiállított számlán szereplő teljesítés időpontjának megegyezik a fizetési határidővel.`;
+var kelt = `Kaposvár ${t[i].kelt}`;
+
 var pdf = {
   content: [
     {
-      text: `KIKÜLDETÉSI RENDELVÉNY (A hivatali, üzleti utazás költségtérítéséhez)\n`,
+      text: `Tejlesítes igazolás\n`,
       style: 'header'
     },
     {
-      text: t.ceg,
-      style: "header"
+      text: fejlec,
+      alignment: 'justify'
     },
     {
-      table: {
-        body: [
-                [
-                {
-                  table: {
-                    widths: [250,250],
-                    body:
-                      kikuldott(text)
-                  },
-                  layout: 'noBorders'
-                }
-            ]
-        ]
-      }
-    },
-    {
-      text: '\n',
-      lineHeight: 1
-    },
-    {
-        table: {
-          widths: ['auto','auto','auto','auto','auto','auto','auto'],
-          body:
-            utak(text)
-        }
-    },
-    {
-      text: " ",
-      lineHeight: 1
-    },
-    {
-      text: ossz_km,
-      alignment: 'right'
-    },
-    {
-      text: "Költségelszámolás",
+      text: "\n",
       lineHeight: 2
     },
     {
-      table:
-      {
-        widths: ['*', 50],
-        body: osszegzes(text)
-      }
+      table: {
+        widths: [col1,col2,col3],
+        body: [
+          [{},{text: 'Teljesített Km',alignment: "center"},{text: 'Egységár', alignment:"left"}]
+        ]
+      },
+      layout: "noBorders"
     },
     {
-      text: osszesen_megtett, alignment: "right", lineHeight: 3
+      table: {
+        widths: ['auto','auto','auto','auto','auto','*'],
+        headerRows: 1,
+        body:
+          teljesites(t)
+
+      },
+        layout: "headerLineOnly"
     },
     {
-			alignment: 'justify',
-			columns: [
-				{
-          width: 305,
-					 table: {
-             widths: [200],
-             body: [
-               [
-                 {
-                   table: {
-                     widths: [200],
-                     body: [
-                       [{text: 'költségelszámolás végösszegét', alignment: "center", fontSize: 12}],
-                       [{text: 'felvettem:', alignment: "center", lineHeight: 2}],
-                       [{text: 'dátum:', alignment: "center", lineHeight: 2}]
-                     ]
-                   },
-                   layout: 'noBorders'
-                 }
-               ],
-               [
-                 {
-                   table: {
-                     widths: [200],
-                     body: [
-                        [{text: alairas, alignment: "center"}]
-                     ]
-                   },
-                   layout: "noBorders"
-                 }
-               ]
-             ]
-           }
-				},
+      text: "\n", lineHeight: 2
+    },
+    {
+      table: {
+        widths: [col1,col2,col3],
+        body:
+          netto(t)
+
+      },
+      layout: "noBorders"
+    },
+    {
+      table: {
+        widths: [col1,col2 - 10,col3],
+        headerRows: 1,
+        body:
+          afa(t)
+      },
+        layout: "headerLineOnly"
+    },
+    {
+      text: " "
+    },
+    {
+    table: {
+      widths: [col1,col2,col3],
+      body:
+        global_osszeg(t)
+
+    },
+    layout: "noBorders"
+  },
+  {
+    text: " "
+  },
+  {
+    text: "Összesen számlázható:"
+  },
+  {
+    text: " "
+  },
+  {
+    text: azaz
+  },
+  {
+    text: "\n",
+    lineHeight: 1
+  },
+  {
+    text: footer
+  },
+  {
+    text: "\n",
+    lineHeight: 3
+  },
+  {
+    text: "Fizetés módja: átutalás"
+  },
+  {
+    columns: [
         {
-          alignment: "right",
-          table: {
-            widths: [200],
-            body: [
-              [
-                {
-                  alignment: "right",
-                  table: {
-                    widths: [200],
-                    body: [
-                      [{text: 'Kiküldetést elrendelő bélyegzője', alignment: "center", fontSize: 12}],
-                      [{text: 'és aláírása:', alignment: "center", lineHeight: 4.25}]
-                    ]
-                  },
-                  layout: 'noBorders'
-                }
-              ],
-              [
-                {
-                  alignment: "right",
-                  table: {
-                    widths: [200],
-                    body: [
-                       [{text: "aláírás, Ph", alignment: "center"}]
-                    ]
-                  },
-                  layout: "noBorders"
-                }
-              ]
-            ]
-          }
+          text: kelt
+        },
+        {
+          text: " "
+        },
+        {
+          text: '                                                                     ', decoration: 'underline', alignment: "center"
         }
-			]
-		}
+    ]
+  },
+  {
+    columns: [
+      {},
+      {},
+      {
+        text: "Cégszerű aláírás", alignment: "center"
+      }
+    ]
+  }
   ],
   styles: {
     header: {
@@ -208,8 +183,9 @@ var pdf = {
 }
 // pdfMake.createPdf(pdf).print();
 var pdfDoc = printer.createPdfKitDocument(pdf);
-var nev = "cegeselszamolasok/TIG-" + t.auto_rendszam + "-" + t.kolcsonado + "-" + t.vege + ".pdf";
+var nev = "cegeselszamolasok/TIG-" + t[i].auto_rendszam + "-" + t[i].kolcsonbe_ado + "-" + t[i].idoszak_vege + ".pdf";
 pdfDoc.pipe(fs.createWriteStream('./../uploads/'+nev));
 pdfDoc.end();
+}
 }
 module.exports = {cegesTIG}
