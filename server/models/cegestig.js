@@ -183,7 +183,7 @@ var pdf = {
 }
 // pdfMake.createPdf(pdf).print();
 var pdfDoc = printer.createPdfKitDocument(pdf);
-var nev = "cegeselszamolasok/TIG-" + t[i].auto_rendszam + "-" + t[i].kolcsonbe_ado + "-" + t[i].idoszak_vege + ".pdf";
+var nev = "cegeselszamolasok/TIG-" + t[i].auto_rendszam + "-" + t[i].kolcsonbe_vevo + "-" + t[i].idoszak_vege + ".pdf";
 pdfDoc.pipe(fs.createWriteStream('./../uploads/'+nev));
 pdfDoc.end();
 }

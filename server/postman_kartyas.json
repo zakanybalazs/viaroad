@@ -1,0 +1,71 @@
+{
+	"r":
+	[
+{
+	"elso_nap"								: "33507",
+	"utolso_nap"							: "33550",
+	"ceg"											: "Meló-Diák Dél Iskolaszövetkezet",
+	"tulaj"           				: "Zákány Balázs",
+	"tulaj_adoszam"   				: "095127440",
+	"tulaj_beosztas"  				: "Fejlesztő",
+	"tulaj_lakcim"    				: "7761 Kozármisleny Viola u. 40/2",
+	"tulaj_szul_ido"  				: "1995-01-09",
+	"tulaj_szul_hely" 				: "Miskolc",
+	"tulaj_szolg_hely"				: "Pécs",
+	"auto_rendszam"   				: "NDN239",
+	"auto_terfogat"   				: "1394",
+	"auto_marka"      				: "Volkswagen",
+	"auto_tipus"      				: "Golf",
+	"auto_fogyasztas" 				: "6.8",
+	"auto_uzemanyag"  				: "Benzin",
+	"auto_kartyaszam" 				: "7081678014337919",
+	"utak"										: [
+													{
+														"ut_id"   			: "151",
+														"ut_datum"			: "2018-01-16 13:29:00",
+														"ut_honnan" 		: "Pécs",
+														"ut_hova"   		: "Budapest",
+														"ut_cel"    		: "Fejlesztés",
+														"ut_kezdo_km" 	: "33487",
+														"ut_zaro_km"  	: "33507",
+														"ut_km"					: "20",
+														"ut_koltseg"    : "12 200",
+														"ut_amortizacio": "1 012"
+													},
+													{
+														"ut_id"   			: "155",
+														"ut_datum"			: "2018-01-18 13:29:00",
+														"ut_honnan" 		: "Budapest",
+														"ut_hova"   		: "Budafok",
+														"ut_cel"    		: "Kutya simogatás",
+														"ut_kezdo_km" 	: "33507",
+														"ut_zaro_km"  	: "33533",
+														"ut_km"					: "26",
+														"ut_koltseg"  	: "13 400",
+														"ut_amortizacio": "1 154"
+													},
+													{
+														"ut_id"   			: "155",
+														"ut_datum"			: "2018-01-18 13:29:00",
+														"ut_honnan" 		: "Kozármisleny",
+														"ut_hova"   		: "Nagyszombatújhely",
+														"ut_cel"    		: "Tárgyalás",
+														"ut_kezdo_km" 	: "33533",
+														"ut_zaro_km"  	: "33550",
+														"ut_km"					: "17",
+														"ut_koltseg" 		: "6 389",
+														"ut_amortizacio": "898"
+													}
+											  ],
+	"ossz_km_uzleti" 					: "63",
+	"ossz_koltseg_uzleti" 		: "40 298",
+	"ossz_km_magan"						: "13",
+	"ossz_koltseg_magan"			: "2 018",
+	"ossz_koltseg_magan_azaz" : "kétezer-tizennyolc",
+	"ossz_koltseg"					  : "42 316",
+	"ossz_km"									: "120",
+	"ossz_amortizacio" 				: "6 513",
+	"kelt"										: "2018-02-02"
+}
+]
+}

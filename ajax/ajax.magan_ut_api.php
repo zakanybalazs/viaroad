@@ -1,6 +1,9 @@
 <?php
 $server = mysqli_connect("localhost","promothe_sqlu","B4l4Zs","promothe_sql");
 require_once '../functions.php';
+function penz($value) {
+  return number_format($value,0,',',' ');
+}
 /* incoming data struct
 rendszam : rendszam,
 tulaj    : userName,
@@ -153,10 +156,10 @@ while ($swa = mysqli_fetch_assoc($sw)) {
 }
 
 $JSON['utak'] = $utak;
-$JSON['ossz_km'] = $ossz_km;
-$JSON['ossz_koltseg'] = round((int)$JSON['uzemanyag_ar'] * ((float)$JSON['auto_fogyasztas'] / 100) * (int)$ossz_km);
-$JSON['ossz_amortizacio'] = round((int)$JSON['amortizacio'] * (int)$ossz_km);
-$JSON['global_osszeg'] = round((int)$JSON['ossz_amortizacio'] + (int)$JSON['ossz_koltseg']);
+$JSON['ossz_km'] = penz($ossz_km);
+$JSON['ossz_koltseg'] = penz(round((int)$JSON['uzemanyag_ar'] * ((float)$JSON['auto_fogyasztas'] / 100) * (int)$ossz_km));
+$JSON['ossz_amortizacio'] = penz(round((int)$JSON['amortizacio'] * (int)$ossz_km));
+$JSON['global_osszeg'] = penz(round((int)$JSON['ossz_amortizacio'] + (int)$JSON['ossz_koltseg']));
 
 header("Content-Type: text/json; charset=utf8");
 echo json_encode($JSON);

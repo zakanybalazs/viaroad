@@ -77,13 +77,13 @@ if (!isset($userName)) {
     </script>
     <script>
     function megy(z) {
-
+      var esc = [];
       for (var r = 1; r <= z; r++) {
         /* kezdet es vegzet mar nem kell, mert korabban meghataroztuk,
         viszont kelleni fog meg a nem nullas rendszam es ceg.
         Ezeket az idkat mi hataroztuk meg a tablazatba valo rendereleskor */
         var rendszam = $( '#rend' + r ).text();
-        var kolcson = $( '#veve' + r ).text();
+        var kolcson = $( '#vev' + r ).text();
         var kezdet = $( '#kezdet' ).val();
         var vegzet = $( '#vegzet' ).val();
         // alert(rendszam);
@@ -92,15 +92,40 @@ if (!isset($userName)) {
         $( '#st' + r ).html('✔️');
         $( '#cx' + r ).attr('href',filename);
 
-        var valami = JSON.stringify(submitData);
-        $.post( "pdfcreator.php", {
-          kod : valami
-        },
-        "json").done(function( response ) { // ajax pdf creation. nincs response mert nem tud mit vissza adni a pdf keszito
-        }); // end of done function
+        esc.push(submitData);
       } // for z, z = records that are not 0
+      console.log(esc);
+      // TODO: 1 make a php api, to get all the well formed data, for making the pdf
+      $.post( "ajax/ajax.ceges_ut_api.php", {
+        data : esc,
+      },
+      "json").done(function( r ) {
+        console.log(r);
 
-
+      // TODO: 2 make the pdf, and handle the errors
+      $.post( "http://localhost:3000/tig_ceges", {
+        r
+      },
+      "json").done(function( response ) {
+        if (response == "ok") {
+        // TODO: 3 save the data to database
+        console.log("sending to db");
+        $( '#ghtj' ).text('Lezárás');
+        $( '#ghtj' ).attr('onclick',"hideopen2('thewell2','" + r + "')");
+      }
+      }).fail((err) => {
+        console.error(err);
+      });
+    }).fail((err) => {
+      console.error(err);
+      bootbox.alert({
+        title: "Hiba",
+        message: "Hiba történt az adatok beolvasásánál!",
+        animate: true,
+        backdrop: true,
+      });
+    });
+      // TODO: 3 save the data to database
       $( '#ghtj' ).text('Lezárás');
       $( '#ghtj' ).attr('onclick',"hideopen2('thewell2','" + r + "')");
     } // megy
@@ -183,7 +208,7 @@ if (!isset($userName)) {
   <script type="text/javascript">
     function egytig() {
       var rendszam = $( '#1rendszam' ).val();
-      var kolcson = $( '#1kolcson' ).val();
+      var kolcson = $( '#1kolcson option:selected' ).html();
       var kezdet = $( '#1kezdo' ).val();
       var vegzet = $( '#1vege' ).val();
       if (rendszam == '' || kolcson == '' || kezdet == '' || vegzet == '') {
@@ -192,31 +217,48 @@ if (!isset($userName)) {
           message : 'Nincsenek megfelelően kitöltve az adatok!',
         });
       } else {
+        var esc = [];
         var submitData = new Array({kezdet, vegzet, rendszam, kolcson});
         var filename = 'uploads/cegeselszamolasok/TIG-' + rendszam + '-' + kolcson + '-' + vegzet + '.pdf';
-        var valami = JSON.stringify(submitData);
+        esc.push(submitData);
 
-        $.post( "pdfcreator.php", {
-          kod : valami
+        console.log(esc);
+        // TODO: 1 make a php api, to get all the well formed data, for making the pdf
+        $.post( "ajax/ajax.ceges_ut_api.php", {
+          data : esc,
         },
-        "json").done(function( response ) { // ajax pdf creation. nincs response mert nem tud mit vissza adni a pdf keszito
-          if ( response != '') {
-            bootbox.alert({
-              title : 'Hiba',
-              message : 'Nem sikerült létrehozni a teljesítésigazolást!',
-            });
-          }
-
-        }); // end of done function
+        "json").done(function( r ) {
+          console.log(r);
+        // TODO: 2 make the pdf, and handle the errors
+        $.post( "http://localhost:3000/tig_ceges", {
+          r
+        },
+        "json").done(function( response ) {
+          if (response == "ok") {
+          // TODO: 3 save the data to database
+          console.log("sending to db");
+          bootbox.alert({
+            title : 'Siker',
+            message : 'TIG elkészítve',
+          });
+        }
+        }).fail((err) => {
+          console.error(err);
+        });
+        }).fail(() => {
+          bootbox.alert({
+            title : 'Hiba',
+            message : 'Nem sikerült létrehozni a teljesítésigazolást!',
+          });
+        }).always(function() {
         $( '#tigklikk' ).attr('target', '_blank');
-        $( '#thediv' ).fadeOut(1200);
-        $( '#egytigklikk' ).removeAttr('onclick');
         $( '#tigklikk' ).removeAttr('hidden');
+        $( '#tigklikk' ).attr('class', "btn btn-success form-control");
+        $( '#tigklikk' ).html('Megtekintés');
         $( '#tigklikk' ).attr('href', filename);
+      });
 
-        document.getElementById('tigklikk').click();
-
-        location.reload();
+      //  location.reload();
       }
     }
   </script>

@@ -338,8 +338,8 @@ $(document).ready(function() {
         var i = 1;
         console.log("line length: " + lines.length);
         setTimeout(function(){
-        while (i < lines.length - 1) {
-          if (i < lines.length - 1) {
+        while (i < lines.length) { // if there is empty line at the and -1 else(mac) 0
+          if (i < lines.length) {
           var str = lines[i].replace(/\"/g, '');
           // ehhez utf-8 pontosvesszővel elválasztott fileokra van szükség
           var str = str.split(';');
@@ -427,22 +427,32 @@ $(document).ready(function() {
                 }
                 console.log("kuldendo:");
                 console.log(rendszamIndexek);
+                console.log("adatok a csv-ben");
+                console.log(arr);
+                var api_arr = [];
                 for (var i = 0; i < rendszamIndexek.length; i+=3) {
                   var rendszam = rendszamIndexek[i];
                   var kartyaszam = rendszamIndexek[i+1];
                   var idoszak =$('#idoszak').val();
-                  var indexek = JSON.stringify(rendszamIndexek[i+2]);
+                  var indexek = rendszamIndexek[i+2];
+                  api_arr.push({'rendszam': rendszam, "kartyaszam": kartyaszam,"idoszak":idoszak,"indexek":indexek});
+                }
+                console.log("kuldendo_new:");
+                console.log(api_arr);
                   var csv = JSON.stringify(arr);
-                  $.post("pdfcreator4.php", {
-                    rendszam: rendszam,
-                    kartyaszam: kartyaszam,
-                    idoszak: idoszak,
-                    indexek: indexek,
-                    csv: arr
+                  var amort = $('#amortizacio').val();
+                  $.post("ajax/ajax.kartyas_ut_api.php", {
+                    data: api_arr,
+                    csv: arr,
+                    amortizacio: amort
                   },
-                  "json").done(function( response ) {
-                    $.post("ajax/ajax.getkartyastig.php", {
-                      idoszak: idoszak
+                   "json").done(function( r ) {
+                     console.log(r);
+
+                     // TODO: place the data in the db
+                     // TODO: add error hendling for all async functions
+                    $.post("http://localhost:3000/tig_kartyas", {
+                      r
                     },
                     "json").done(function( response ) {
                       if (response != "error") {
@@ -456,7 +466,7 @@ $(document).ready(function() {
                       }
                     });
                   });
-                }
+
             });
         }
       });
